@@ -9,6 +9,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Applicant extends Model
 {
 
+    protected $fillable = [
+        'area_id', 'category_id',
+        'applicant_name', 'guardian_name',
+        'present_address', 'permanent_address',
+        'nid_no', 'email', 'phone',
+        'bank_name', 'pay_order_no', 'amount', 'order_date',
+        'applicant_image', 'signature_image', 'nid_image', 'py_order_image',
+    ];
     protected static function booted()
     {
         static::creating(function ($application) {
