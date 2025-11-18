@@ -1,5 +1,6 @@
 <?php
 return [
+    'application_number'=>'আবেদন নং',
     'area_name'=>'রুটের নাম',
     'description'=>'বিবরণ',
     'category_name'=> 'ক্যাটাগরি',
@@ -24,4 +25,5 @@ return [
     'py_order_image'=>'পে অর্ডারের ছবি',
     'confirmed_by'=>'আবেদন গ্রহন',
     'approved_by'=>'অনুমোদন',
+    'status'=>'অবস্থা',
 ];

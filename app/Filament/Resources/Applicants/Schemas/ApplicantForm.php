@@ -21,6 +21,7 @@ class ApplicantForm
             ->components([
                 Wizard::make([
                     Step::make('রুট ও ক্যাটাগরি নির্বাচন')
+                        ->id('selection')
                         ->schema([
                             Section::make('রুট ও ক্যাটাগরি নির্বাচন')
                             ->schema([
@@ -38,6 +39,7 @@ class ApplicantForm
                             ->columnSpanFull(),
                         ]),
                     Step::make('ব্যক্তিগত তথ্য')
+                        ->id('personal')
                         ->schema([
                             Section::make('ব্যক্তিগত তথ্য')
                             ->schema([
@@ -68,64 +70,81 @@ class ApplicantForm
                                             ->required(),
                                     ])
                                     ->columnSpanFull(),
+                                    
                             
+                            ])
+                            ->columns(2)
+                            ->columnSpanFull(),
+                        Section::make('প্রয়োজনীয় ডকুমেন্ট সংযুক্তকরণ')
+                            ->schema([
+                                
+                                FileUpload::make('applicant_image')
+                                        ->label(__('forms.applicant_image'))
+                                        ->image()
+                                        ->previewable()
+                                        ->imageEditor()
+                                        ->circleCropper()
+                                        ->disk('public')
+                                        ->directory('applicants/profile')
+                                        ->required(),
+                                    FileUpload::make('signature_image')
+                                        ->label(__('forms.signature_image'))
+                                        ->image()
+                                        ->imageEditor()
+                                        ->disk('public')
+                                        ->directory('applicants/signature'),
+                                    FileUpload::make('nid_image')
+                                        ->label(__('forms.nid_image'))
+                                        ->image()
+                                        ->imageEditor()
+                                        ->disk('public')
+                                        ->directory('applicants/nid')
+                                        ->required(),
                             ])
                             ->columns(2)
                             ->columnSpanFull(),
 
                         ]),
                     Step::make('পে অর্ডারের বিবরন')
+                        ->id('payment')
                         ->schema([
                 
-                        Section::make('পে অর্ডারের বিবরন')
-                            ->schema([
-                                TextInput::make('bank_name')
-                                    ->label(__('forms.bank_name'))
-                                    ->default(null),
-                                TextInput::make('pay_order_no')
-                                    ->label(__('forms.pay_order_no'))
-                                    ->default(null),
-                                TextInput::make('amount')
-                                    ->label(__('forms.amount'))
-                                    ->default(null),
-                                DatePicker::make('order_date')
-                                    ->label(__('forms.order_date')),
-                            ])
-                            ->columns(2)
-                            ->columnSpanFull(),
-                ]),
-                    Step::make('ডকুমেন্ট সংযুক্তকরণ')
-                        ->schema([
+                            Section::make('পে অর্ডারের বিবরন')
+                                ->schema([
+                                    TextInput::make('bank_name')
+                                        ->label(__('forms.bank_name'))
+                                        ->default(null),
+                                    TextInput::make('pay_order_no')
+                                        ->label(__('forms.pay_order_no'))
+                                        ->default(null),
+                                    TextInput::make('amount')
+                                        ->label(__('forms.amount'))
+                                        ->default(null),
+                                    DatePicker::make('order_date')
+                                        ->label(__('forms.order_date')),
+                                ])
+                                ->columns(2)
+                                ->columnSpanFull(),
+                            
                             Section::make('প্রয়োজনীয় ডকুমেন্ট সংযুক্তকরণ')
                                 ->schema([
-                                    FileUpload::make('applicant_image')
-                                        ->label(__('forms.applicant_image'))
-                                        ->image()
-                                        ->previewable()
-                                        ->imageEditor()
-                                        ->disk('public')
-                                        ->required(),
-                                    FileUpload::make('signature_image')
-                                        ->label(__('forms.signature_image'))
-                                        ->image()
-                                        ->imageEditor()
-                                        ->disk('public'),
-                                    FileUpload::make('nid_image')
-                                        ->label(__('forms.nid_image'))
-                                        ->image()
-                                        ->imageEditor()
-                                        ->disk('public')
-                                        ->required(),
+                                    
                                     FileUpload::make('py_order_image')
                                         ->label(__('forms.py_order_image'))
                                         ->image()
                                         ->imageEditor()
-                                        ->disk('public'),
+                                        ->disk('public')
+                                        ->directory('applicants/pay_order'),
                                 ])
                                 ->columns(2)
                                 ->columnSpanFull(),
-                ]),
-                ])->columnSpanFull(),
+                    ]),
+                        Step::make('সিদ্ধান্ত')
+                            ->schema([
+                    ]),
+                ])
+                ->skippable()
+                ->columnSpanFull(),
                 
                 
                 // TextInput::make('confirmed_by')

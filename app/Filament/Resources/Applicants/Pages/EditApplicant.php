@@ -11,6 +11,10 @@ class EditApplicant extends EditRecord
 {
     protected static string $resource = ApplicantResource::class;
 
+    public function getTitle(): string
+    {
+        return "আবেদন নং: {$this->record->application_number} — {$this->record->applicant_name}";
+    }
     protected function getHeaderActions(): array
     {
         return [

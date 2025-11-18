@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('area_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->string('application_number')->unique();
             $table->string('applicant_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->string('guardian_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->text('present_address')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
@@ -37,6 +38,7 @@ return new class extends Migration
             $table->string('py_order_image')->nullable();
             $table->foreignId('confirmed_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->enum('status', ['pending', 'confirmed', 'approved', 'expired','rejected'])->default('pending');
             $table->timestamps();
         });
     }

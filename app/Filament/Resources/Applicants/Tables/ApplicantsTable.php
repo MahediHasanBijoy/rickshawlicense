@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\View\Components\BadgeComponent;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -22,6 +23,10 @@ class ApplicantsTable
                 // TextColumn::make('category.category_name')
                 //     ->label(__('forms.category_name'))
                     // ->searchable(),
+                
+                TextColumn::make('application_number')
+                    ->label('আবেদন নং')
+                    ->searchable(),
                 TextColumn::make('applicant_name')
                     ->label(__('forms.applicant_name'))
                     ->searchable(),
@@ -56,6 +61,16 @@ class ApplicantsTable
                 TextColumn::make('applicaton_date')
                     ->label(__('forms.applicaton_date'))
                     ->date()
+                    ->sortable(),
+                TextColumn::make('status')
+                    ->label(__('forms.status'))
+                    ->badge()
+                    ->colors([
+                        'warning' => 'pending',
+                        'info' => 'confirmed',
+                        'success' => 'approved',
+                        'danger' => 'rejected',
+                    ])
                     ->sortable(),
                 // TextColumn::make('confirm_date')
                 //     ->label(__('forms.confirm_date'))
