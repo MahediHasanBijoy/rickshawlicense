@@ -294,11 +294,101 @@
     <div class="text-center mb-4">
         <button id="showStatusBtn" class="btn btn-info btn-lg">আবেদনের অবস্থা</button>
     </div>
+    <div class="card shadow border-0 rounded-4 mb-5" 
+     id="searchCard" 
+     style="background:white; display:none;">
+        <div class="card-body">
+            <h4 class="text-center mb-3">আবেদনের অবস্থা অনুসন্ধান করুন</h4>
+
+            <div id="searchError" class="alert alert-danger d-none"></div>
+
+            <form id="searchForm">
+                <div class="mb-3">
+                    <label class="fw-bold">এন আই ডি নং</label>
+                    <input type="text" class="form-control form-control-lg" id="nid_search">
+                </div>
+
+                <div class="mb-3">
+                    <label class="fw-bold">মোবাইল</label>
+                    <input type="text" class="form-control form-control-lg" id="phone_search">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg mx-auto">
+                    অনুসন্ধান করুন
+                </button>
+                <button type="button" class="btn btn-success btn-lg mx-auto" id="printBtn">
+                    প্রিন্ট করুন
+                </button>
+            </form>
+
+            <hr>
+
+            <!-- Where result will show -->
+            <div id="searchResult"></div>
+        </div>
+    </div>
+
+
     <script>
+        // show application form
         document.getElementById('showFormBtn').addEventListener('click', function() {
             document.getElementById('applicantFormCard').style.display = 'block';
             this.style.display = 'none'; // hide the button after click
             window.scrollTo({ top: document.getElementById('applicantFormCard').offsetTop - 20, behavior: 'smooth' });
+        });
+        // show search form
+        document.getElementById('showStatusBtn').addEventListener('click', function() {
+            document.getElementById('searchCard').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('searchCard').offsetTop - 20, behavior: 'smooth' });
+        });
+
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let nid = document.querySelector("#nid_search").value;
+            let phone = document.querySelector("#phone_search").value;
+
+            if (!nid && !phone) {
+                alert("NID বা মোবাইল নম্বর দিন");
+                return;
+            }
+
+
+            fetch("{{ route('applicant.search') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    nid: nid,
+                    phone: phone
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('searchError').innerHTML = data.error;
+                    document.getElementById('searchError').classList.remove('d-none');
+                    document.getElementById('searchResult').innerHTML = "";
+                } else {
+                    document.getElementById('searchError').classList.add('d-none');
+                    document.getElementById('searchResult').innerHTML = data.html;
+                }
+            });
+        });
+        document.getElementById("printBtn").addEventListener("click", function() {
+            let nid = document.querySelector("#nid_search").value;
+            let phone = document.querySelector("#phone_search").value;
+
+            if (!nid && !phone) {
+                alert("NID বা মোবাইল নম্বর দিন");
+                return;
+            }
+
+            let url = `{{ route('applicant.print') }}?nid=${nid}&phone=${phone}`;
+
+            window.open(url, "_blank");
         });
     </script>
 @endsection

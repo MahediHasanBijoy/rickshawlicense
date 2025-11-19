@@ -63,4 +63,57 @@ class ApplicantController extends Controller
 
         return redirect()->back()->with('success', 'আপনার আবেদন সফলভাবে জমা হয়েছে!');
     }
+
+    public function search(Request $request)
+    {
+        // Validate: at least one must be present
+        $request->validate([
+            'nid'   => 'nullable',
+            'phone' => 'nullable',
+        ]);
+
+        if (!$request->nid && !$request->phone) {
+            return response()->json([
+                'error' => 'NID অথবা মোবাইল নম্বর অন্তত একটি দিতে হবে'
+            ]);
+        }
+
+        $applicant = Applicant::when($request->nid, function ($query) use ($request) {
+                                    return $query->where('nid_no', $request->nid);
+                                })
+                            ->when($request->phone, function ($query) use ($request) {
+                                    return $query->where('phone', $request->phone);
+                                })
+                            ->first();
+
+        if (!$applicant) {
+            return response()->json([
+                'error' => 'কোনো তথ্য পাওয়া যায়নি'
+            ]);
+        }
+        $html = view('applicant.search', compact('applicant'))->render();
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function print(Request $request)
+    {
+        $nid = $request->nid;
+        $phone = $request->phone;
+
+        if (!$nid && !$phone) {
+            abort(404, "Invalid request.");
+        }
+
+        $applicant = Applicant::when($nid, fn($q) => $q->where('nid_no', $nid))
+                            ->when($phone, fn($q) => $q->where('phone', $phone))
+                            ->first();
+
+        if (!$applicant) {
+            abort(404, "Application not found.");
+        }
+
+        return view('applicant.print', compact('applicant'));
+    }
+
 }
