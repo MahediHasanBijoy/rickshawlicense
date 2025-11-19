@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Applicant extends Model
 {
@@ -39,5 +40,9 @@ class Applicant extends Model
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+    public function payment(): HasOne
+    {
+        return $this->hasOne(Payment::class);
     }
 }

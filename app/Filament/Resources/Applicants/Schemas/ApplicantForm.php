@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\Applicants\Schemas;
 
+use Dom\Text;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Wizard;
@@ -141,10 +144,73 @@ class ApplicantForm
                     ]),
                         Step::make('সিদ্ধান্ত')
                             ->schema([
-                    ]),
-                ])
-                ->skippable()
-                ->columnSpanFull(),
+                                Section::make('সিদ্ধান্ত')
+                                    ->relationship('payment')
+                                    ->schema([
+                                        TextInput::make('fee')
+                                            ->label(__('forms.fee'))
+                                            ->reactive()
+                                            ->required()
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'pending'),
+                                        
+                                        TextInput::make('security_fee')
+                                            ->label(__('forms.security_fee'))
+                                            ->default(0)
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'selected'),    
+                                        
+                                    ])
+                                    ->columns(2),
+                                    Section::make('পূর্বের কার্যক্রমের সংক্ষিপ্ত বিবরন')
+                                        ->relationship('payment')
+                                        ->schema([
+                                            Grid::make(3)
+                                                ->schema([
+                                                    TextEntry::make('invoice_no')
+                                                        ->label(__('forms.invoice_no'))
+                                                        ->disabled(),
+                                                    TextEntry::make('yearly_fee')
+                                                        ->label(__('forms.yearly_fee'))
+                                                        ->disabled(),
+                                                    TextEntry::make('yearly_fee_date')
+                                                        ->label(__('forms.date'))
+                                                        ->disabled(),
+                                                ])
+                                               ,
+                                            Grid::make(3)
+                                                ->schema([
+                                                    TextEntry::make('fee')
+                                                        ->label(__('forms.fee'))
+                                                        
+                                                        ->disabled(),
+                                                    TextEntry::make('fee_date')
+                                                        ->label(__('forms.date'))
+                                                        ->disabled(),
+                                                    TextEntry::make('created_by')
+                                                        ->label(__('forms.created_by'))
+                                                        ->formatStateUsing(fn ($record) => $record?->createdBy?->name),
+                                                    ])
+                                                    ->hidden(fn ($livewire) => $livewire->getRecord()?->status === 'pending'),
+                                            Grid::make(3)
+                                                ->schema([
+                                                    TextEntry::make('security_fee')
+                                                        ->label(__('forms.security_fee'))
+                                                        ->disabled(),
+                                                    TextEntry::make('security_fee_date')
+                                                        ->label(__('forms.date')),
+                                                    TextEntry::make('security_fee_by')
+                                                        ->label(__('forms.security_fee_by'))
+                                                       ->formatStateUsing(fn ($record) => $record?->securityFeeBy?->name) 
+                                            ])
+                                                ->hidden(fn ($livewire) => $livewire->getRecord()?->status === 'selected' 
+                                                                            || $livewire->getRecord()?->status === 'pending'
+                                                                            || $livewire->getRecord()?->status === 'confirmed')
+                                        ])
+                            ]),
+                            
+                        ])
+                        ->skippable()
+                        ->columns(2)
+                        ->columnSpanFull(),
                 
                 
                 // TextInput::make('confirmed_by')

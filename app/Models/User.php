@@ -58,4 +58,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Applicant::class, 'approved_by');
     }
+
+    public function createdPayments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'created_by');
+    }
+    public function updatedPayments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'updated_by');
+    }
 }

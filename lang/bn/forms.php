@@ -1,5 +1,6 @@
 <?php
 return [
+    'invoice_no'=>'রশিদ নং',
     'application_number'=>'আবেদন নং',
     'area_name'=>'রুটের নাম',
     'description'=>'বিবরণ',
@@ -26,4 +27,14 @@ return [
     'confirmed_by'=>'আবেদন গ্রহন',
     'approved_by'=>'অনুমোদন',
     'status'=>'অবস্থা',
+    'fee'=>'আবেদন ফি',
+    'yearly_fee'=>'বার্ষিক ফি',
+    'security_fee'=>'সিকিউরিটি ফি',
+    'yearly_fee_refund'=>'বার্ষিক ফি ফেরত',
+    'security_fee_refund'=>'সিকিউরিটি ফি ফেরত',
+    'total_paid'=>'মোট পরিশোধিত',
+    'payment_date'=>'পরিশোধের তারিখ',
+    'date'=>'তারিখ',
+    'created_by'=>'তৈরী করেছেন',
+    'security_fee_by'=>'সিকিউরিটি ফি আদায়কারী',
 ];
