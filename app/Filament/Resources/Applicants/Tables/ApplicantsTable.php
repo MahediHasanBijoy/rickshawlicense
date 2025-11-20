@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Applicants\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -116,7 +117,28 @@ class ApplicantsTable
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
+                EditAction::make()
+                    ->label(''),
+                Action::make('selected')
+                    ->label('')
+                    ->icon('heroicon-o-document-check')
+                    ->action(function ($record) {
+                        $record->update([
+                            'status' => 'selected',
+                        ]);
+                    })
+                    ->color('warning')
+                    ->visible(fn($record)=>$record->status==='confirmed'),
+                Action::make('reject')
+                    ->label('')
+                    ->icon('heroicon-o-x-circle')
+                    ->action(function ($record) {
+                        $record->update([
+                            'status' => 'rejected',
+                        ]);
+                    })
+                    ->color('danger')
+                    ->visible(fn($record)=>$record->status==='confirmed'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

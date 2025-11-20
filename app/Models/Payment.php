@@ -36,7 +36,7 @@ class Payment extends Model
            if ($applicant &&  $applicant->status == 'selected') {
                 $payment->security_fee_by = auth()->id();
                 $payment->security_fee_date = now()->format('Y-m-d');
-                
+                $payment->saveQuietly();
                  $applicant->status = 'approved';
                  $applicant->approved_by  = auth()->id();
                  $applicant->save();

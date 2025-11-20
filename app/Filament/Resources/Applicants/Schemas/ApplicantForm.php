@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Applicants\Schemas;
 use Dom\Text;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -62,13 +61,18 @@ class ApplicantForm
                                     ->schema([
                                         TextInput::make('nid_no')
                                             ->label(__('forms.nid_no'))
-                                            ->required(),
+                                            ->unique()
+                                            ->required()
+                                            ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
+                                            ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state)),
                                         TextInput::make('email')
                                             ->label(__('forms.email'))
                                             ->email()
                                             ->default(null),
                                         TextInput::make('phone')
                                             ->label(__('forms.phone'))
+                                            ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
+                                            ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
                                             ->tel()
                                             ->required(),
                                     ])
@@ -122,6 +126,8 @@ class ApplicantForm
                                         ->default(null),
                                     TextInput::make('amount')
                                         ->label(__('forms.amount'))
+                                        ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
+                                        ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
                                         ->default(null),
                                     DatePicker::make('order_date')
                                         ->label(__('forms.order_date')),
@@ -143,6 +149,7 @@ class ApplicantForm
                                 ->columnSpanFull(),
                     ]),
                         Step::make('সিদ্ধান্ত')
+                            ->visible(fn ($livewire) => ! ($livewire instanceof \Filament\Resources\Pages\CreateRecord))
                             ->schema([
                                 Section::make('সিদ্ধান্ত')
                                     ->relationship('payment')
@@ -155,6 +162,8 @@ class ApplicantForm
                                         
                                         TextInput::make('security_fee')
                                             ->label(__('forms.security_fee'))
+                                            ->reactive()
+                                            ->required()
                                             ->default(0)
                                             ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'selected'),    
                                         
