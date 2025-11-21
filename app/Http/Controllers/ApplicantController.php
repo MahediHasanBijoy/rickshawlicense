@@ -6,6 +6,11 @@ use App\Models\Area;
 use App\Models\Category;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 
 class ApplicantController extends Controller
 {
@@ -26,9 +31,9 @@ class ApplicantController extends Controller
             'guardian_name'     => 'required|string|max:255',
             'present_address'   => 'required|string|max:255',
             'permanent_address' => 'required|string|max:255',
-            'nid_no'            => 'required|string|max:50',
+            'nid_no'            => 'required|string|max:50|unique:applicants,nid_no',
             'email'             => 'nullable|email|max:255',
-            'phone'             => 'required|digits_between:10,11',
+            'phone'             => 'required|digits_between:10,11|unique:applicants,phone',
 
             'bank_name'         => 'nullable|string|max:255',
             'pay_order_no'      => 'nullable|string|max:255',
@@ -113,7 +118,21 @@ class ApplicantController extends Controller
             abort(404, "Application not found.");
         }
 
-        return view('applicant.print', compact('applicant'));
+        $printUrl = url('/application/print') . '?nid=' . $applicant->nid_no . '&phone=' . $applicant->phone;
+
+        // SVG-based QR code (no Imagick required)
+        $renderer = new ImageRenderer(
+            new RendererStyle(200),
+            new SvgImageBackEnd()
+        );
+
+        $writer = new Writer($renderer);
+        $qr = $writer->writeString($printUrl);
+
+
+        $qrImage = 'data:image/svg+xml;base64,' . base64_encode($qr);
+
+        return view('applicant.print', compact('applicant','qrImage'));
     }
 
 }
