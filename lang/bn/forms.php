@@ -37,4 +37,10 @@ return [
     'date'=>'তারিখ',
     'created_by'=>'তৈরী করেছেন',
     'security_fee_by'=>'সিকিউরিটি ফি আদায়কারী',
+    'designation_name'=>'পদবীর নাম',
+    'department_name'=>'বিভাগের নাম',
+    'description'=>'বিবরণ',
+    'department'=>'বিভাগ',
+    'designation'=>'পদবি',
+    'role'=>'ভূমিকা',
 ];
