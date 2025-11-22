@@ -305,7 +305,7 @@
         <div class="info-row">
             <span class="info-label">এন আইডি নং:</span>
             <span class="info-value">
-                {{ $applicant->nid_no ?? '' }} 
+                {{ $applicant->nid_no ? bn_number($applicant->nid_no): '' }} 
             </span>
         </div>
 
@@ -319,7 +319,7 @@
         <div class="info-row">
             <span class="info-label">মোবাইল:</span>
             <span class="info-value">
-                {{ $applicant->phone ?? '' }} 
+                {{ $applicant->phone ? bn_number($applicant->phone) : '' }} 
             </span>
         </div>
 

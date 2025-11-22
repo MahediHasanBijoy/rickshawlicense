@@ -38,7 +38,7 @@
     <div class="text-center mb-4">
         <button id="showFormBtn" class="btn btn-primary btn-lg">আবেদন করুন</button>
     </div>
-    <div class="card shadow border-0 rounded-4 mb-5" style="background: white;display: none;" id="applicantFormCard">
+    <div class="card shadow border-0 rounded-4 mb-5" style="background: white;{{ ($errors->any() || session('success')) ? '' : 'display:none;' }}" id="applicantFormCard">
         <div class="card-body">
             @if (session('success'))
                 <div class="alert alert-success">
@@ -252,12 +252,30 @@
                             </div>
                         </div>
 
-                        <div class=" mb-3 align-items-center">
+                        <!-- <div class=" mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
                                 স্বাক্ষর
                             </label>
                             <div class="ms-5">
                                 <input type="file" name="signature_image" class="form-control form-control-lg" placeholder="">
+                            </div>
+                        </div> -->
+
+                        <div class=" mb-3 align-items-center">
+                            <label class="col-form-label fw-bold">
+                                নাগরিক সনদ
+                            </label>
+                            <div class="ms-5">
+                                <input type="file" name="citizen_certificate_image" class="form-control form-control-lg" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class=" mb-3 align-items-center">
+                            <label class="col-form-label fw-bold">
+                                ক্যাটাগরি প্রমানক
+                            </label>
+                            <div class="ms-5">
+                                <input type="file" name="category_proof_image" class="form-control form-control-lg" placeholder="">
                             </div>
                         </div>
 
@@ -332,9 +350,27 @@
     <script>
         // show application form
         document.getElementById('showFormBtn').addEventListener('click', function() {
-            document.getElementById('applicantFormCard').style.display = 'block';
-            this.style.display = 'none'; // hide the button after click
-            window.scrollTo({ top: document.getElementById('applicantFormCard').offsetTop - 20, behavior: 'smooth' });
+            // document.getElementById('applicantFormCard').style.display = 'block';
+            // this.style.display = 'none'; // hide the button after click
+            // window.scrollTo({ top: document.getElementById('applicantFormCard').offsetTop - 20, behavior: 'smooth' });
+             const formCard = document.getElementById('applicantFormCard');
+
+            if (formCard.style.display === 'none' || formCard.style.display === '') {
+                // Show the form
+                formCard.style.display = 'block';
+                window.scrollTo({
+                    top: formCard.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            } else {
+                // Hide the form
+                formCard.style.display = 'none';
+                this.textContent = 'আবেদন করুন'; // original button text
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
         });
         // show search form
         document.getElementById('showStatusBtn').addEventListener('click', function() {

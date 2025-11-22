@@ -42,7 +42,9 @@ class ApplicantController extends Controller
 
             // File validation
             'applicant_image'   => 'required|image|max:2048',
-            'signature_image'   => 'nullable|image|max:2048',
+            // 'signature_image'   => 'nullable|image|max:2048',
+            'citizen_certificate_image'   => 'nullable|image|max:2048',
+            'category_proof_image'   => 'nullable|image|max:2048',
             'nid_image'         => 'required|image|max:2048',
             'py_order_image'    => 'nullable|image|max:2048',
         ]);
@@ -62,6 +64,14 @@ class ApplicantController extends Controller
 
         if ($request->hasFile('py_order_image')) {
             $validated['py_order_image'] = $request->file('py_order_image')->store('order', 'public');
+        }
+
+        if ($request->hasFile('citizen_certificate_image')) {
+            $validated['citizen_certificate_image'] = $request->file('citizen_certificate_image')->store('citizen_certificate', 'public');
+        }
+
+        if ($request->hasFile('category_proof_image')) {
+            $validated['category_proof_image'] = $request->file('category_proof_image')->store('category_proof', 'public');
         }
 
         Applicant::create($validated);
