@@ -23,7 +23,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="Logo">
             </a>
             <div class="mx-auto text-center">
-                <h5 class="m-0 fw-bold" style="font-size:45px;">ঢাকা ক্যান্টনমেন্ট বোর্ড</h5>
+                <h5 class="m-0 fw-bold" style="font-size:45px; color:white">ঢাকা ক্যান্টনমেন্ট বোর্ড</h5>
             </div>
         </div>
     </nav>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Models\Area;
 use App\Models\Category;
 use App\Models\Applicant;
@@ -23,6 +24,14 @@ class ApplicantController extends Controller
 
     public function store(Request $request)
     {
+       if ($request->filled('amount')) {
+            $request->merge([
+                'amount' => Helper::bn2en($request->amount),
+                'nid_no' => Helper::bn2en($request->nid_no),
+                'phone'  => Helper::bn2en($request->phone),
+                
+            ]);
+        }
         $validated = $request->validate([
             'area_id'           => 'required|exists:areas,id',
             'category_id'       => 'required|exists:categories,id',
@@ -48,6 +57,8 @@ class ApplicantController extends Controller
             'nid_image'         => 'required|image|max:2048',
             'py_order_image'    => 'nullable|image|max:2048',
         ]);
+
+        // dd($validated);
 
         
         if ($request->hasFile('applicant_image')) {

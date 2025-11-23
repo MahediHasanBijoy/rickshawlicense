@@ -41,6 +41,14 @@ class Payment extends Model
                  $applicant->approved_by  = auth()->id();
                  $applicant->save();
             }
+            if($applicant->status==='rejected' && $payment->is_yearly_fee_refund){
+                $payment->yearly_fee_refund_date = now()->format('Y-m-d');
+                $payment->yearly_fee_refund = $payment->yearly_fee;
+                $payment->yearly_fee_refund_by = auth()->id();
+                $payment->saveQuietly();
+                $applicant->status = 'refunded';
+                $applicant->save();
+            }
         });
     }
     public function applicant(): BelongsTo

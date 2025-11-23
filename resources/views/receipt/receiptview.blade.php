@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
-    <title>আবেদনপত্র - প্রিন্ট</title>
+    <title>রশিদ - প্রিন্ট</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.min.css') }}">
     <style>
         @page {
@@ -258,8 +258,25 @@
         </div>
 
         <!-- Section 1: Personal Information -->
-        <div class="section-title">০১. ব্যক্তিগত তথ্য (Personal Information)</div>
-
+        {{-- <div class="section-title">০১. ব্যক্তিগত তথ্য (Personal Information)</div> --}}
+        <div class="info-row">
+            <span class="info-label">আবেদনকারীর নাম:</span>
+            <span class="info-value">
+                {{ $applicant->applicant_name ?? '' }} 
+            </span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">বর্তমান ঠিকানা:</span>
+            <span class="info-value">
+                {{ $applicant->present_address ?? '' }} 
+            </span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">মোবাইল:</span>
+            <span class="info-value">
+                {{ $applicant->phone ? bn_number($applicant->phone) : '' }} 
+            </span>
+        </div>
         <div class="info-row">
             <span class="info-label">রুট:</span>
             <span class="info-value">
@@ -274,26 +291,16 @@
             </span>
         </div>
 
-        <div class="info-row">
-            <span class="info-label">আবেদনকারীর নাম:</span>
-            <span class="info-value">
-                {{ $applicant->applicant_name ?? '' }} 
-            </span>
-        </div>
+        
 
-        <div class="info-row">
+        {{-- <div class="info-row">
             <span class="info-label">পিতা/স্বামীর নাম:</span>
             <span class="info-value">
                 {{ $applicant->guardian_name ?? '' }}
             </span>
         </div>
 
-        <div class="info-row">
-            <span class="info-label">বর্তমান ঠিকানা:</span>
-            <span class="info-value">
-                {{ $applicant->present_address ?? '' }} 
-            </span>
-        </div>
+        
 
         <div class="info-row">
             <span class="info-label">স্থায়ী ঠিকানা:</span>
@@ -314,24 +321,20 @@
             <span class="info-value">
                 {{ $applicant->email ?? '' }}
             </span>
-        </div>
+        </div> --}}
 
-        <div class="info-row">
-            <span class="info-label">মোবাইল:</span>
-            <span class="info-value">
-                {{ $applicant->phone ? bn_number($applicant->phone) : '' }} 
-            </span>
-        </div>
+        
 
         <!-- Section 2: Pay Order Information -->
-        <div class="section-title">০২. পে অর্ডারের বিবরন (Pay Order Information)</div>
+        <div class="section-title">০১. পে অর্ডারের বিবরন (Pay Order Information)</div>
 
         <table class="data-table">
             <thead>
                 <tr>
-                    <th style="width: 33%;">ব্যাংকের নাম</th>
-                    <th style="width: 33%;">পে অর্ডার নং</th>
-                    <th style="width: 34%;">পরিমান</th>
+                    <th style="width: 25%;">ব্যাংকের নাম</th>
+                    <th style="width: 25%;">পে অর্ডার নং</th>
+                    <th style="width: 25%;">তারিখ</th>
+                    <th style="width: 25%;">পরিমান</th>
                 </tr>
             </thead>
             <tbody>
@@ -343,28 +346,130 @@
                     <td class="text-center">
                          {{ $applicant->pay_order_no ?? '' }}
                     </td>
+                    <td class="text-center">{{ $applicant->order_date ? bn_number(\Carbon\Carbon::parse($applicant->order_date)->format('d/m/Y')) : '' }}</td>
                     <td class="text-center">
-                         {{ bn_number($applicant->amount ?? '') }}/=
+                         {{ bn_number($applicant->amount) ?? '' }}/= 
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <div class="info-row">
+        <div class="section-title">০২. আবেদন ফি প্রদানের বিবরন (Application Fee Information)</div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">ব্যাংকের নাম</th>
+                    <th style="width: 25%;">রশিদ নং</th>
+                    <th style="width: 25%;">তারিখ</th>
+                    <th style="width: 25%;">পরিমান</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">
+                          অফিস
+                        
+                    </td>
+                    <td class="text-center">
+                         {{ $applicant->payment->invoice_no ?? '' }}
+                    </td>
+                    <td class="text-center">{{ $applicant->order_date ? bn_number(\Carbon\Carbon::parse($applicant->payment->fee_date )->format('d/m/Y')) : '' }}</td>
+                    <td class="text-center">
+                         {{ bn_number($applicant->payment->fee ?? '') }} /=
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        @if ($applicant->payment->security_fee > 0)
+        <div class="section-title">০৩. সিকিউরিটি ফি প্রদানের বিবরন (Security Fee Information)</div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">ব্যাংকের নাম</th>
+                    <th style="width: 25%;">রশিদ নং</th>
+                    <th style="width: 25%;">তারিখ</th>
+                    <th style="width: 25%;">পরিমান</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">
+                          অফিস
+                        
+                    </td>
+                    <td class="text-center">
+                         {{ $applicant->payment->invoice_no ?? '' }}
+                    </td>
+                    <td class="text-center">{{ $applicant->payment->security_fee_date ? bn_number(\Carbon\Carbon::parse($applicant->payment->security_fee_date )->format('d/m/Y')) : '' }}</td>
+                    <td class="text-center">
+                         {{ bn_number($applicant->payment->security_fee ?? '') }} /=
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        @endif
+        @if($applicant->payment->is_yearly_fee_refund || $applicant->payment->is_security_refund)
+        <div class="section-title">০৪. জামানত ফেরতের  বিবরন (Refund Information)</div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">বিষয়</th>
+                    <th style="width: 25%;">রশিদ নং</th>
+                    <th style="width: 25%;">তারিখ</th>
+                    <th style="width: 25%;">পরিমান</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ($applicant->payment->is_security_refund)
+                <tr>
+                    <td class="text-center">
+                        সিকিউরিটি ফি ফেরত  
+                    </td>
+                    <td class="text-center">
+                         {{ $applicant->payment->invoice_no ?? '' }}
+                    </td>
+                    <td class="text-center">{{ $applicant->payment->security_fee_refund_date ? bn_number(\Carbon\Carbon::parse($applicant->payment->security_fee_refund_date )->format('d/m/Y')) : '' }}</td>
+                    <td class="text-center">
+                         {{ bn_number($applicant->payment->security_fee_refund ?? '') }} /=
+                    </td>
+                </tr>
+                @elseif ( $applicant->payment->is_yearly_fee_refund)
+                <tr>
+                    <td class="text-center">
+                        বার্ষিক ফি ফেরত  
+                    </td>
+                    <td class="text-center">
+                         {{ $applicant->payment->invoice_no ?? '' }}
+                    </td>
+                    <td class="text-center">{{ $applicant->payment->yearly_fee_refund_date ? bn_number(\Carbon\Carbon::parse($applicant->payment->yearly_fee_refund_date )->format('d/m/Y')) : '' }}</td>
+                    <td class="text-center">
+                         {{ bn_number($applicant->payment->yearly_fee_refund ?? '') }} /=
+                    </td>
+                </tr>
+                @endif
+                
+            </tbody>
+        </table>
+
+@endif
+        {{-- <div class="info-row">
             <span class="info-label">পরিশোধের তারিখ:</span>
             <span class="info-value">
                 {{ $applicant->order_date ? bn_number(\Carbon\Carbon::parse($applicant->order_date)->format('d/m/Y')) : '' }}
             </span>
-        </div>
+        </div> --}}
 
         <!-- Declaration Section -->
-        <div class="declaration">
+        {{-- <div class="declaration">
             <p><strong>ঘোষণা:</strong></p>
             <p style="margin-top: 10px;">
                 আমি এই মর্মে ঘোষণা করছি যে, উপরোক্ত সকল তথ্য সঠিক এবং সত্য। কোন তথ্য মিথ্যা প্রমাণিত হলে 
                 আমার আবেদন বাতিল করা যাবে এবং আমি এর জন্য দায়ী থাকব।
             </p>
-        </div>
+        </div> --}}
 
         <!-- Signature Section -->
         <!-- <div class="signature-section">

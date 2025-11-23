@@ -73,7 +73,6 @@ class ApplicantForm
                                             ->label(__('forms.phone'))
                                             ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
                                             ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
-                                            ->tel()
                                             ->required(),
                                     ])
                                     ->columnSpanFull(),
@@ -165,7 +164,21 @@ class ApplicantForm
                                             ->reactive()
                                             ->required()
                                             ->default(0)
-                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'selected'),    
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'selected'),
+                                        Select::make('is_yearly_fee_refund')
+                                            ->label('বার্ষিক ফি ফেরত দিতে চান?')
+                                            ->options([
+                                                1 => 'হ্যাঁ',
+                                                0 => 'না',
+                                            ])
+                                            ->required()
+                                            ->default(0)
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'rejected'), 
+                                        TextInput::make('yearly_fee')   
+                                            ->label(__('forms.yearly_fee_refund'))
+                                            ->required()
+                                            ->disabled()
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'rejected'),
                                         
                                     ])
                                     ->columns(2),
