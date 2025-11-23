@@ -9,7 +9,11 @@
     <title>Rickshaw License</title>
 
     <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap-datepicker.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <script src="{{ asset('js/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap/bootstrap-datepicker.js') }}"></script>
     <style>
         .navbar-brand img {
             height: 70px;   /* Adjust logo size */
@@ -31,6 +35,7 @@
         @yield('main_content')
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
+    
+    
 </body>
 </html>
