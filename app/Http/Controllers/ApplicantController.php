@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Helper;
 use App\Models\Area;
+use App\Helpers\Helper;
+use BaconQrCode\Writer;
 use App\Models\Category;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Validation\Rule;
 use BaconQrCode\Renderer\ImageRenderer;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-use BaconQrCode\Writer;
 
 class ApplicantController extends Controller
 {
@@ -37,9 +38,22 @@ class ApplicantController extends Controller
             'guardian_name'     => 'required|string|max:255',
             'present_address'   => 'required|string|max:255',
             'permanent_address' => 'required|string|max:255',
-            'nid_no'            => 'required|string|max:50|unique:applicants,nid_no',
+            'nid_no' => [
+                            'required',
+                            'string',
+                            'max:50',
+                            Rule::unique('applicants')->where(function ($query) use ($request) {
+                                return $query->where('applicant_year', date('Y'));
+                            }),
+                        ],
             'email'             => 'nullable|email|max:255',
-            'phone'             => 'required|digits_between:10,11|unique:applicants,phone',
+            'phone' => [
+                            'required',
+                            'digits_between:10,11',
+                            Rule::unique('applicants')->where(function ($query) use ($request) {
+                                return $query->where('applicant_year', date('Y'));
+                            }),
+                        ],
 
             'bank_name'         => 'nullable|string|max:255',
             'pay_order_no'      => 'nullable|string|max:255',

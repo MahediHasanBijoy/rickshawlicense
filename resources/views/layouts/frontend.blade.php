@@ -27,11 +27,11 @@
                 <img src="{{ asset('images/logo.png') }}" alt="Logo">
             </a>
             <div class="mx-auto text-center">
-                <h5 class="m-0 fw-bold" style="font-size:45px; color:white">ঢাকা ক্যান্টনমেন্ট বোর্ড</h5>
+                <h5 class="m-0 fw-bold" style="font-size:45px; color:white;padding-right:90px;">ঢাকা ক্যান্টনমেন্ট বোর্ড</h5>
             </div>
         </div>
     </nav>
-    <div class="container mt-5">
+    <div class="container mt-2">
         @yield('main_content')
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
