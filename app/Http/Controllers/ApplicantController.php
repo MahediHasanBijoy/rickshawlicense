@@ -24,14 +24,11 @@ class ApplicantController extends Controller
 
     public function store(Request $request)
     {
-       if ($request->filled('amount')) {
-            $request->merge([
-                'amount' => Helper::bn2en($request->amount),
-                'nid_no' => Helper::bn2en($request->nid_no),
-                'phone'  => Helper::bn2en($request->phone),
-                
-            ]);
-        }
+        $request->merge([
+            'amount' => Helper::bn2en($request->amount),
+            'nid_no' => Helper::bn2en($request->nid_no),
+            'phone'  => Helper::bn2en($request->phone),
+        ]);
         $validated = $request->validate([
             'area_id'           => 'required|exists:areas,id',
             'category_id'       => 'required|exists:categories,id',
@@ -58,7 +55,10 @@ class ApplicantController extends Controller
             'py_order_image'    => 'nullable|image|max:2048',
         ]);
 
-        // dd($validated);
+        // Convert date fields
+        if (!empty($validated['order_date'])) {
+            $validated['order_date'] = \Carbon\Carbon::createFromFormat('d-m-Y', $validated['order_date'])->format('Y-m-d');
+        }
 
         
         if ($request->hasFile('applicant_image')) {
@@ -85,9 +85,10 @@ class ApplicantController extends Controller
             $validated['category_proof_image'] = $request->file('category_proof_image')->store('category_proof', 'public');
         }
 
-        Applicant::create($validated);
+        $applicant = Applicant::create($validated);
 
-        return redirect()->back()->with('success', 'আপনার আবেদন সফলভাবে জমা হয়েছে!');
+        return redirect()->back()->with('success', 'আপনার আবেদন সফলভাবে জমা হয়েছে!')->with('nid', $applicant->nid_no)
+        ->with('phone', $applicant->phone);
     }
 
     public function search(Request $request)

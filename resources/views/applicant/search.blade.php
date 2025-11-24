@@ -29,11 +29,13 @@
 
     <h5 class="fw-bold mt-4 mb-3">আবেদনের অবস্থা</h5>
     <p><strong>{{ $applicant->status??'' }}</strong> </p>
-    <!-- <hr>
-
-    <h5 class="fw-bold mt-4 mb-3">পে অর্ডার তথ্য</h5>
-    <p><strong>ব্যাংকের নাম:</strong> {{ $applicant->bank_name ?? '—' }}</p>
-    <p><strong>পে অর্ডার নং:</strong> {{ $applicant->pay_order_no ?? '—' }}</p>
-    <p><strong>পরিমাণ:</strong> {{ $applicant->amount ?? '—' }}</p>
-    <p><strong>তারিখ:</strong> {{ $applicant->order_date ?? '—' }}</p> -->
+    <hr>
+    <a href="{{ route('applicant.print', ['nid' => $applicant->nid, 'phone' => $applicant->phone]) }}" class="btn btn-success btn-lg mx-auto" target="_blank">
+        প্রিন্ট করুন
+    </a>
+    <button type="button" class="btn btn-secondary btn-lg mx-auto" id="close_search_card">
+        ফিরে যান
+    </button>
+    
 </div>
+

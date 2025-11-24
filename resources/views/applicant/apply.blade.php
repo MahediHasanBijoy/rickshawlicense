@@ -50,10 +50,19 @@
     <div class="card shadow border-0 rounded-4 mb-5" style="background: white;{{ ($errors->any() || session('success')) ? '' : 'display:none;' }}" id="applicantFormCard">
         <div class="card-body">
             @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
+                <div class="alert alert-success d-flex justify-content-between align-items-center">
+                    <span>{{ session('success') }}</span>
+
+                    @if(session('nid') && session('phone'))
+                        <a href="{{ route('applicant.print') }}?nid={{ session('nid') }}&phone={{ session('phone') }}" 
+                        target="_blank" 
+                        class="btn btn-info btn-sm">
+                            প্রিন্ট করুন
+                        </a>
+                    @endif
                 </div>
             @endif
+
             <div class="container mt-5">
                 <form action="{{ route('applicant.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -241,7 +250,7 @@
                                 পরিশোধের তারিখ
                             </label>
                             <div class="ms-5">
-                                <input type="date" name="order_date" class="form-control form-control-lg" placeholder="" value="{{ old('order_date') }}">
+                                <input type="text" name="order_date" class="form-control form-control-lg" id="order_date" placeholder="" value="{{ old('order_date') }}">
                             </div>
                         </div>
                     </div>
@@ -312,13 +321,14 @@
                     </div>
                     <!-- Submit Button -->
                     <div class="text-center mt-3">
-                        <button class="btn btn-success btn-lg px-5">জমা দিন</button>
+                        <button type="submit" class="btn btn-success btn-lg px-5">জমা দিন</button>
+                        <button type="button" class="btn btn-secondary btn-lg px-5" id="close_application">ফিরে যান</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <div class="text-center mb-4">
+    <div class="text-center mb-4" id="application_status">
         <button id="showStatusBtn" class="btn btn-info btn-lg">আবেদনের অবস্থা</button>
     </div>
     <div class="card shadow border-0 rounded-4 mb-5" 
@@ -341,11 +351,10 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-lg mx-auto">
-                    অনুসন্ধান করুন
+                    <span class="spinner-border spinner-border-sm d-none" id="searchLoader"></span>
+                    <span id="searchBtnText">অনুসন্ধান করুন</span>
                 </button>
-                <button type="button" class="btn btn-success btn-lg mx-auto" id="printBtn">
-                    প্রিন্ট করুন
-                </button>
+                
             </form>
 
             <hr>
@@ -359,9 +368,7 @@
     <script>
         // show application form
         document.getElementById('showFormBtn').addEventListener('click', function() {
-            // document.getElementById('applicantFormCard').style.display = 'block';
-            // this.style.display = 'none'; // hide the button after click
-            // window.scrollTo({ top: document.getElementById('applicantFormCard').offsetTop - 20, behavior: 'smooth' });
+            
              const formCard = document.getElementById('applicantFormCard');
 
             if (formCard.style.display === 'none' || formCard.style.display === '') {
@@ -371,6 +378,9 @@
                     top: formCard.offsetTop - 20,
                     behavior: 'smooth'
                 });
+                // hide application status button
+                document.getElementById('application_status').style.display = 'none';
+                document.getElementById('searchCard').style.display = 'none';
             } else {
                 // Hide the form
                 formCard.style.display = 'none';
@@ -379,12 +389,27 @@
                     top: 0,
                     behavior: 'smooth'
                 });
+                // show application status button
+                document.getElementById('application_status').style.display = 'block';
             }
         });
+        // close application form
+        document.getElementById('close_application').addEventListener('click', function(){
+            document.getElementById('applicantFormCard').style.display = 'none';
+            // show application status button
+            document.getElementById('application_status').style.display = 'block';
+        })
         // show search form
         document.getElementById('showStatusBtn').addEventListener('click', function() {
             document.getElementById('searchCard').style.display = 'block';
             window.scrollTo({ top: document.getElementById('searchCard').offsetTop - 20, behavior: 'smooth' });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'close_search_card') {
+                document.getElementById('searchResult').innerHTML = '';
+                document.getElementById('searchCard').style.display = 'none';
+            }
         });
 
         document.getElementById('searchForm').addEventListener('submit', function(e) {
@@ -420,20 +445,26 @@
                     document.getElementById('searchError').classList.add('d-none');
                     document.getElementById('searchResult').innerHTML = data.html;
                 }
+                window.scrollTo({ top: document.getElementById('searchResult').offsetTop - 20, behavior: 'smooth' });
             });
         });
-        document.getElementById("printBtn").addEventListener("click", function() {
-            let nid = document.querySelector("#nid_search").value;
-            let phone = document.querySelector("#phone_search").value;
+        // document.getElementById("printBtn").addEventListener("click", function() {
+        //     let nid = document.querySelector("#nid_search").value;
+        //     let phone = document.querySelector("#phone_search").value;
 
-            if (!nid && !phone) {
-                alert("NID বা মোবাইল নম্বর দিন");
-                return;
-            }
+        //     if (!nid && !phone) {
+        //         alert("NID বা মোবাইল নম্বর দিন");
+        //         return;
+        //     }
 
-            let url = `{{ route('applicant.print') }}?nid=${nid}&phone=${phone}`;
+        //     let url = `{{ route('applicant.print') }}?nid=${nid}&phone=${phone}`;
 
-            window.open(url, "_blank");
+        //     window.open(url, "_blank");
+        // });
+        $('#order_date').datepicker({
+            format: 'dd-mm-yyyy',
+            todayHighlight: true,
+            autoclose: true
         });
     </script>
 @endsection
