@@ -18,7 +18,7 @@ class Payment extends Model
                 : 1;
             $payment->invoice_no  = $prefix . str_pad($number, 4, '0', STR_PAD_LEFT);
             $payment->fee_date = now()->format('Y-m-d');
-            $payment->yearly_fee = $applicant->amount;
+            $payment->yearly_fee = $applicant->amount ?? 0;
             $payment->yearly_fee_date = $applicant->order_date;
             $payment->created_by = auth()->id();
             $payment->payment_date = now()->format('Y-m-d');
@@ -28,7 +28,7 @@ class Payment extends Model
         static::saved(function ($payment) {
             $payment->updated_by = auth()->id();
             $applicant = Applicant::find($payment->applicant_id);
-            if ($applicant &&  $applicant->status == 'pending') {
+            if ($applicant &&  $applicant->status == 'pending' && $payment->fee > 0) {
                 $applicant->status = 'confirmed';
                 $applicant->confirmed_by  = auth()->id();
                 $applicant->save();

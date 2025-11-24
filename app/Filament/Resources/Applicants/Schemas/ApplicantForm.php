@@ -61,7 +61,9 @@ class ApplicantForm
                                     ->schema([
                                         TextInput::make('nid_no')
                                             ->label(__('forms.nid_no'))
-                                            ->unique()
+                                            ->unique(ignoreRecord: true, modifyRuleUsing: fn ($rule) =>
+                                                    $rule->where('applicant_year', now()->year)
+                                            )
                                             ->required()
                                             ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
                                             ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state)),
@@ -71,6 +73,9 @@ class ApplicantForm
                                             ->default(null),
                                         TextInput::make('phone')
                                             ->label(__('forms.phone'))
+                                            ->unique(ignoreRecord: true, modifyRuleUsing: fn ($rule) =>
+                                                $rule->where('applicant_year', now()->year)
+                                            )
                                             ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
                                             ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
                                             ->required(),
@@ -157,14 +162,19 @@ class ApplicantForm
                                             ->label(__('forms.fee'))
                                             ->reactive()
                                             ->required()
-                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'pending'),
+                                            ->default(0)
+                                            ->columnSpanFull()
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'pending'
+                                            || ($livewire->getRecord()?->status !== 'pending' && auth()->user()->hasRole('super_admin'))),
                                         
                                         TextInput::make('security_fee')
                                             ->label(__('forms.security_fee'))
                                             ->reactive()
                                             ->required()
                                             ->default(0)
-                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'selected'),
+                                            ->columnSpanFull()
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'selected'
+                                            || ($livewire->getRecord()?->status === 'approved' && auth()->user()->hasRole('super_admin'))),
                                         Select::make('is_yearly_fee_refund')
                                             ->label('বার্ষিক ফি ফেরত দিতে চান?')
                                             ->options([
@@ -173,12 +183,14 @@ class ApplicantForm
                                             ])
                                             ->required()
                                             ->default(0)
-                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'rejected'), 
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'rejected'
+                                            || ($livewire->getRecord()?->status === 'refunded' && auth()->user()->hasRole('super_admin'))), 
                                         TextInput::make('yearly_fee')   
                                             ->label(__('forms.yearly_fee_refund'))
                                             ->required()
                                             ->disabled()
-                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'rejected'),
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'rejected'
+                                            || ($livewire->getRecord()?->status === 'refunded' && auth()->user()->hasRole('super_admin'))),
                                         
                                     ])
                                     ->columns(2),
@@ -222,11 +234,25 @@ class ApplicantForm
                                                     TextEntry::make('security_fee_by')
                                                         ->label(__('forms.security_fee_by'))
                                                        ->formatStateUsing(fn ($record) => $record?->securityFeeBy?->name) 
-                                            ])
+                                                ])      
                                                 ->hidden(fn ($livewire) => $livewire->getRecord()?->status === 'selected' 
                                                                             || $livewire->getRecord()?->status === 'pending'
-                                                                            || $livewire->getRecord()?->status === 'confirmed')
-                                        ])
+                                                                            || $livewire->getRecord()?->status === 'confirmed'
+                                                                            || $livewire->getRecord()?->status === 'rejected')
+                                                ]),
+                                            Grid::make(3)
+                                                ->schema([
+                                                    TextEntry::make('yearly_fee_refund')
+                                                        ->label(__('forms.yearly_fee_refund'))
+                                                        ->disabled(),
+                                                    TextEntry::make('yearly_fee_refund_date')
+                                                        ->label(__('forms.date')),
+                                                    TextEntry::make('yearly_fee_refund_by')
+                                                        ->label(__('forms.yearly_fee_refund_by'))
+                                                       ->formatStateUsing(fn ($record) => $record?->yearlyFeeRefundBy?->name) 
+                                                ])      
+                                                ->visible(fn ($record) => $record->is_yearly_fee_refund === true)
+
                             ]),
                             
                         ])

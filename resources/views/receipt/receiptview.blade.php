@@ -237,7 +237,7 @@
         <div class="form-header">
             <h4>ক্যান্টনমেন্ট বোর্ড</h4>
             <h5>ঢাকা ক্যান্টনমেন্ট, ঢাকা</h5>
-            <p>রিক্সার লাইসেন্সের জন্য আবেদন পত্র</p>
+            <p>রশিদ কপি</p>
         </div>
 
         
@@ -290,6 +290,15 @@
                  {{ $applicant->category->category_name ?? '' }} 
             </span>
         </div>
+        @if ($applicant->license_number)
+        <div class="info-row">
+            <span class="info-label">লাইসেন্স নাম্বার:</span>
+            <span class="info-value">
+                {{ bn_number($applicant->license_number)  }} 
+            </span>
+        </div>
+        @endif
+
 
         
 
@@ -499,6 +508,9 @@
     <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
     <script>
         window.print();
+        window.onafterprint = function () {
+                window.close();
+            };
     </script>
 </body>
 </html>

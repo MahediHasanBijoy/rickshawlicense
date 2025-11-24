@@ -43,4 +43,6 @@ return [
     'department'=>'বিভাগ',
     'designation'=>'পদবি',
     'role'=>'ভূমিকা',
+    'start_number'=>'শুরু নম্বর',
+    'end_number'=>'শেষ নম্বর',
 ];

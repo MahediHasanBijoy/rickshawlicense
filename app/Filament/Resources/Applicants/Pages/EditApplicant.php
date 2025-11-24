@@ -24,7 +24,8 @@ class EditApplicant extends EditRecord
             Action::make('Print Receipt')
                 ->label('রশিদ প্রিন্ট করুন')
                 ->url(fn () => route('applicant.receipt', ['app_id' => $this->record->id]))
-                ->openUrlInNewTab(),
+                ->openUrlInNewTab()
+                ->visible(fn()=>$this->record->status!='pending'),
         ];
     }
 
