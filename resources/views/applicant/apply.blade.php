@@ -31,13 +31,27 @@
     </style>
 
     <!-- Top Heading -->
-    <h3 class="text-center fw-bold mb-4">
-        ক্যান্টনমেন্ট এক্সিকিউটিভ অফিসারের কার্যালয়, ঢাকা
+    <h3 class="text-center fw-bold mb-1">
+        ক্যান্টনমেন্ট এক্সিকিউটিভ অফিসারের কার্যালয়
     </h3>
+    <h5 class="text-center fw-bold mb-2">
+        ঢাকা ক্যান্টনমেন্ট, ঢাকা
+    </h5>
 
-    <div class="text-center mb-4">
+    <section id="application-instructions" style="border:1px solid #e0e0e0;border-radius:8px;padding:16px;margin-bottom:16px;background:#fafafa;">
+        <h3 style="margin-top:0;font-size:1.1rem;">নির্দেশনাসমূহঃ</h3>
+        <ul style="padding-left:1.25rem;line-height:1.5;margin-bottom:12px;">
+            <li>একজন ব্যক্তি একের অধিক কোটায় আবেদন করতে পারবেন না। আবেদনকারী মনোনীত হলে ১টি লাইসেন্স ইজারা/বরাদ্দ পাবেন।</li>
+            <li>আবেদনের সাথে সিইও, ঢাকা ক্যান্টনমেন্ট এর অনুকূলে লাইসেন্স ফি বাবদ ৭৩০০/- (সাত হাজার তিনশত) টাকার পে-অর্ডারের কপিসহ তথ্য প্রদান করতে হবে। আবেদনকারী মনোনীত হলে পে-অর্ডার জমা প্রদান করতে হবে।</li>
+            <li>রিক্সার লাইসেন্সের জন্য অনুমতিপ্রাপ্ত হলে লাইসেন্স ফি এর উপর 15% ভ্যাট ও 10% উৎসকর প্রদান করতে হবে। এছাড়া প্রতিটি লাইসেন্সের জন্য ৩০০০/- (তিন হাজার) টাকা জমা রাখতে হবে। এর মধ্যে জামানত বাবদ ২০০০/- টাকা লাইসেন্সের মেয়াদ শেষে ফেরতযোগ্য। অবশিষ্ট ১০০০/- টাকা রিক্সা মনিটরিং ফি বাবদ কর্তন করা হবে।</li>
+            <li>রিক্সার লাইসেন্স বিক্রয় করা যাবে না, তবে ভাড়া প্রদান করতে পারবেন। কোনো অনিয়ম পরিলক্ষিত হলে জামানত বাজেয়াপ্ত ও প্রয়োজনীয় আইনানুগ ব্যবস্থা গ্রহণ করা হবে।</li>
+            <li>আবেদনকারী ঢাকা সিটিকর্পোরেশন বা ঢাকা ক্যান্টনমেন্ট বোর্ডের আওতাধীন এলাকায় বসবাসকারী হতে হবে। প্রমানক হিসেবে সংশ্লিষ্ট এলাকার নাগরিক সনদপত্র দাখিল করতে হবে।</li>
+            <li>সকল কোটার আবেদনের ক্ষেত্রে কোটার প্রমানক সংযুক্ত করতে হবে।</li>
+        </ul>
+    </section>
+    <div class="text-center mb-2">
         <button id="showFormBtn" class="btn btn-primary btn-lg">আবেদন করুন</button>
-        @if($errors->any())
+        <!-- @if($errors->any())
             <div class="alert alert-danger">
                 <ul>
                     @foreach($errors->all() as $error)
@@ -45,7 +59,7 @@
                     @endforeach
                 </ul>
             </div>
-        @endif
+        @endif -->
     </div>
     <div class="card shadow border-0 rounded-4 mb-5" style="background: white;{{ ($errors->any() || session('success')) ? '' : 'display:none;' }}" id="applicantFormCard">
         <div class="card-body">
