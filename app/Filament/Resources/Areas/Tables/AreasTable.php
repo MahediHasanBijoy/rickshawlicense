@@ -16,6 +16,12 @@ class AreasTable
             ->columns([
                 TextColumn::make('area_name')
                     ->label(__('forms.area_name')),
+                TextColumn::make('start_number')
+                    ->label(__('forms.start_number'))
+                    ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state)),
+                TextColumn::make('end_number')
+                    ->label(__('forms.end_number'))
+                    ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state)),  
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -40,7 +40,7 @@
 
     <section id="application-instructions" style="border:1px solid #e0e0e0;border-radius:8px;padding:16px;margin-bottom:16px;background:#fafafa;">
         <h3 style="margin-top:0;font-size:1.1rem;">নির্দেশনাসমূহঃ</h3>
-        <ul style="padding-left:1.25rem;line-height:1.5;margin-bottom:12px;">
+        <ul style="padding-left:1.25rem;line-height:1.5;margin-bottom:12px; color:red;">
             <li>একজন ব্যক্তি একের অধিক কোটায় আবেদন করতে পারবেন না। আবেদনকারী মনোনীত হলে ১টি লাইসেন্স ইজারা/বরাদ্দ পাবেন।</li>
             <li>আবেদনের সাথে সিইও, ঢাকা ক্যান্টনমেন্ট এর অনুকূলে লাইসেন্স ফি বাবদ ৭৩০০/- (সাত হাজার তিনশত) টাকার পে-অর্ডারের কপিসহ তথ্য প্রদান করতে হবে। আবেদনকারী মনোনীত হলে পে-অর্ডার জমা প্রদান করতে হবে।</li>
             <li>রিক্সার লাইসেন্সের জন্য অনুমতিপ্রাপ্ত হলে লাইসেন্স ফি এর উপর 15% ভ্যাট ও 10% উৎসকর প্রদান করতে হবে। এছাড়া প্রতিটি লাইসেন্সের জন্য ৩০০০/- (তিন হাজার) টাকা জমা রাখতে হবে। এর মধ্যে জামানত বাবদ ২০০০/- টাকা লাইসেন্সের মেয়াদ শেষে ফেরতযোগ্য। অবশিষ্ট ১০০০/- টাকা রিক্সা মনিটরিং ফি বাবদ কর্তন করা হবে।</li>
@@ -264,7 +264,7 @@
                                 পরিশোধের তারিখ
                             </label>
                             <div class="ms-5">
-                                <input type="text" name="order_date" class="form-control form-control-lg" id="order_date" placeholder="" value="{{ old('order_date') }}">
+                                <input type="text" name="order_date" class="form-control form-control-lg" id="order_date" placeholder="" value="{{ old('order_date') }}" readonly>
                             </div>
                         </div>
                     </div>

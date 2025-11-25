@@ -96,14 +96,9 @@ class ApplicantForm
                                         ->imageEditor()
                                         ->circleCropper()
                                         ->disk('public')
-                                        ->directory('applicants/profile')
+                                        ->directory('applicant')
                                         ->required(),
-                                    FileUpload::make('signature_image')
-                                        ->label(__('forms.signature_image'))
-                                        ->image()
-                                        ->imageEditor()
-                                        ->disk('public')
-                                        ->directory('applicants/signature'),
+                                    
                                     FileUpload::make('nid_image')
                                         ->label(__('forms.nid_image'))
                                         ->image()
@@ -111,6 +106,20 @@ class ApplicantForm
                                         ->disk('public')
                                         ->directory('applicants/nid')
                                         ->required(),
+
+                                    FileUpload::make('citizen_certificate_image')
+                                        ->label(__('forms.citizen_certificate_image'))
+                                        ->image()
+                                        ->imageEditor()
+                                        ->disk('public')
+                                        ->directory('citizen_certificate'),
+
+                                    FileUpload::make('category_proof_image')
+                                        ->label(__('forms.category_proof_image'))
+                                        ->image()
+                                        ->imageEditor()
+                                        ->disk('public')
+                                        ->directory('category_proof'),
                             ])
                             ->columns(2)
                             ->columnSpanFull(),
@@ -124,17 +133,21 @@ class ApplicantForm
                                 ->schema([
                                     TextInput::make('bank_name')
                                         ->label(__('forms.bank_name'))
-                                        ->default(null),
+                                        ->default(null)
+                                        ->required(),
                                     TextInput::make('pay_order_no')
                                         ->label(__('forms.pay_order_no'))
-                                        ->default(null),
+                                        ->default(null)
+                                        ->required(),
                                     TextInput::make('amount')
                                         ->label(__('forms.amount'))
                                         ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
                                         ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
-                                        ->default(null),
+                                        ->default(null)
+                                        ->required(),
                                     DatePicker::make('order_date')
-                                        ->label(__('forms.order_date')),
+                                        ->label(__('forms.order_date'))
+                                        ->required(),
                                 ])
                                 ->columns(2)
                                 ->columnSpanFull(),
@@ -146,8 +159,9 @@ class ApplicantForm
                                         ->label(__('forms.py_order_image'))
                                         ->image()
                                         ->imageEditor()
+                                        ->required()
                                         ->disk('public')
-                                        ->directory('applicants/pay_order'),
+                                        ->directory('pay_order'),
                                 ])
                                 ->columns(2)
                                 ->columnSpanFull(),
@@ -162,8 +176,13 @@ class ApplicantForm
                                             ->label(__('forms.fee'))
                                             ->reactive()
                                             ->required()
-                                            ->default(0)
+                                            ->default(function () {
+                                                $setting = \App\Models\ApplicationSetting::first();
+                                                return $setting ? $setting->application_fee : 0;
+                                            })
                                             ->columnSpanFull()
+                                            ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
+                                            ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
                                             ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'pending'
                                             || ($livewire->getRecord()?->status !== 'pending' && auth()->user()->hasRole('super_admin'))),
                                         
@@ -171,8 +190,10 @@ class ApplicantForm
                                             ->label(__('forms.security_fee'))
                                             ->reactive()
                                             ->required()
-                                            ->default(0)
+                                            ->default(3000)
                                             ->columnSpanFull()
+                                            ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
+                                            ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
                                             ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'selected'
                                             || ($livewire->getRecord()?->status === 'approved' && auth()->user()->hasRole('super_admin'))),
                                         Select::make('is_yearly_fee_refund')
@@ -189,6 +210,7 @@ class ApplicantForm
                                             ->label(__('forms.yearly_fee_refund'))
                                             ->required()
                                             ->disabled()
+                                            ->dehydrated(true)
                                             ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'rejected'
                                             || ($livewire->getRecord()?->status === 'refunded' && auth()->user()->hasRole('super_admin'))),
                                         

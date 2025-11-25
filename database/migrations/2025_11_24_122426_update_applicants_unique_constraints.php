@@ -30,7 +30,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('applicants', function (Blueprint $table) {
-            //
+            $table->dropColumn('applicant_year');
+
+            // 2. Drop new composite uniques
+            $table->dropUnique(['nid_no', 'applicant_year']);
+            $table->dropUnique(['phone', 'applicant_year']);
+
+          
         });
     }
 };

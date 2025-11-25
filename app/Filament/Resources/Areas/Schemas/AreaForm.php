@@ -18,15 +18,18 @@ class AreaForm
                     ->required(),
                 TextInput::make('start_number')
                     ->label(__('forms.start_number'))
-                    ->numeric()
+                    ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
+                    ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
                     ->required(),
                 TextInput::make('end_number')
                     ->label(__('forms.end_number'))
-                    ->numeric()
+                    ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
+                    ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
                     ->required(),
                 Textarea::make('description')
                     ->label(__('forms.description'))
                     ->default(null)
+
                     ->columnSpanFull(),
             ]);
     }

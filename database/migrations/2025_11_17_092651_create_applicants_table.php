@@ -24,10 +24,10 @@ return new class extends Migration
             $table->string('nid_no')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->unique();
             $table->string('email')->nullable();
             $table->string('phone')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->unique();
-            $table->string('bank_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->nullable();
-            $table->string('pay_order_no')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->nullable();
-            $table->string('amount')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->nullable();
-            $table->date('order_date')->nullable();
+            $table->string('bank_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+            $table->string('pay_order_no')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+            $table->string('amount')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->default(0);
+            $table->date('order_date');
             $table->date('applicaton_date')->nullable();
             $table->date('confirm_date')->nullable();
             $table->date('approval_date')->nullable();
@@ -35,10 +35,10 @@ return new class extends Migration
             $table->string('applicant_image');
             $table->string('signature_image')->nullable();
             $table->string('nid_image');
-            $table->string('py_order_image')->nullable();
+            $table->string('py_order_image');
             $table->foreignId('confirmed_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->enum('status', ['pending', 'confirmed', 'approved', 'expired','rejected'])->default('pending');
+            $table->enum('status', ['pending', 'confirmed','selected','approved', 'expired','rejected'])->default('pending');
             $table->timestamps();
         });
     }

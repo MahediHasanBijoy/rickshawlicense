@@ -45,4 +45,9 @@ return [
     'role'=>'ভূমিকা',
     'start_number'=>'শুরু নম্বর',
     'end_number'=>'শেষ নম্বর',
+    'citizen_certificate_image'=>'নাগরিকত্ব সনদের ছবি',
+    'category_proof_image'=>'ক্যাটাগরির প্রমাণিক ছবি',
+    'application_fee'=>'আবেদন ফি',
+    'app_expire_date'=>'আবেদনের শেষ তারিখ',
+    'daily_fee'=>'দৈনিক ফি',
 ];
