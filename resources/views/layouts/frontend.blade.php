@@ -16,20 +16,33 @@
     <script src="{{ asset('js/bootstrap/bootstrap-datepicker.js') }}"></script>
     <style>
         .navbar-brand img {
-            height: 70px;   /* Adjust logo size */
+            height: 60px;   /* Adjust logo size */
+        }
+        @media (max-width: 390px) {
+            nav h5 {
+                font-size: 30px !important;
+            }
+            .navbar-brand img {
+                height: 50px;   /* Adjust logo size */
+            }
         }
     </style>
 </head>   
 <body class="bg-warning bg-opacity-10">
     <nav class="navbar navbar-light bg-success shadow-sm py-2">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo">
-            </a>
-            <div class="mx-auto text-center">
-                <h5 class="m-0 fw-bold" style="font-size:45px; color:white;padding-right:90px;">ঢাকা ক্যান্টনমেন্ট বোর্ড</h5>
-            </div>
-        </div>
+        <div class="container position-relative d-flex align-items-center">
+        
+        <!-- Logo (left) -->
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height:60px;">
+        </a>
+
+        <!-- Centered Heading -->
+        <h5 class="m-0 fw-bold text-white position-absolute top-50 start-50 translate-middle w-100 text-center"
+            style="font-size:40px;">
+            ঢাকা ক্যান্টনমেন্ট বোর্ড
+        </h5>
+    </div>
     </nav>
     <div class="container mt-2">
         @yield('main_content')

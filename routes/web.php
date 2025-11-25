@@ -7,6 +7,10 @@ use App\Http\Controllers\ReceiptController;
 Route::get('/', [ApplicantController::class, 'create'])->name('home');
 Route::post('/apply', [ApplicantController::class, 'store'])->name('applicant.store');
 Route::post('/applicant/search', [ApplicantController::class, 'search'])->name('applicant.search');
+Route::get('/applicant/{id}/edit', [ApplicantController::class, 'edit'])
+    ->name('applicant.edit');
+Route::put('/applicant/{applicant}', [ApplicantController::class, 'update'])
+    ->name('applicant.update');
 Route::get('/application/print', [ApplicantController::class, 'print'])->name('applicant.print');
 
 

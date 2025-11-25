@@ -55,10 +55,10 @@ class ApplicantController extends Controller
                             }),
                         ],
 
-            'bank_name'         => 'nullable|string|max:255',
-            'pay_order_no'      => 'nullable|string|max:255',
-            'amount'            => 'nullable|numeric',
-            'order_date'        => 'nullable|date',
+            'bank_name'         => 'required|string|max:255',
+            'pay_order_no'      => 'required|string|max:255',
+            'amount'            => 'required|numeric',
+            'order_date'        => 'required|date',
 
             // File validation
             'applicant_image'   => 'required|image|max:2048',
@@ -102,7 +102,8 @@ class ApplicantController extends Controller
         $applicant = Applicant::create($validated);
 
         return redirect()->back()->with('success', 'আপনার আবেদন সফলভাবে জমা হয়েছে!')->with('nid', $applicant->nid_no)
-        ->with('phone', $applicant->phone);
+        ->with('phone', $applicant->phone)
+        ->with('id', $applicant->id);
     }
 
     public function search(Request $request)
@@ -139,22 +140,19 @@ class ApplicantController extends Controller
 
     public function print(Request $request)
     {
-        $nid = $request->nid;
-        $phone = $request->phone;
+        $id = $request->id;
 
-        if (!$nid && !$phone) {
+        if (!$id ) {
             abort(404, "Invalid request.");
         }
 
-        $applicant = Applicant::when($nid, fn($q) => $q->where('nid_no', $nid))
-                            ->when($phone, fn($q) => $q->where('phone', $phone))
-                            ->first();
+        $applicant = Applicant::findOrFail($id);;
 
         if (!$applicant) {
             abort(404, "Application not found.");
         }
 
-        $printUrl = url('/application/print') . '?nid=' . $applicant->nid_no . '&phone=' . $applicant->phone;
+        $printUrl = url('/application/print') . '?id=' . $applicant->id;
 
         // SVG-based QR code (no Imagick required)
         $renderer = new ImageRenderer(
@@ -170,5 +168,97 @@ class ApplicantController extends Controller
 
         return view('applicant.print', compact('applicant','qrImage'));
     }
+
+    public function edit($id)
+    {
+        $applicant = Applicant::findOrFail($id);
+        $areas = Area::select('id', 'area_name')->get();
+        $categories = Category::select('id', 'category_name')->get();
+        return view('applicant.edit', compact('applicant','areas', 'categories'));
+    }
+
+    public function update(Request $request, Applicant $applicant)
+    {
+        // Convert Bangla numbers before validation
+        $request->merge([
+            'amount' => Helper::bn2en($request->amount),
+            'nid_no' => Helper::bn2en($request->nid_no),
+            'phone'  => Helper::bn2en($request->phone),
+        ]);
+
+        $validated = $request->validate([
+            'area_id'           => 'required|exists:areas,id',
+            'category_id'       => 'required|exists:categories,id',
+
+            'applicant_name'    => 'required|string|max:255',
+            'guardian_name'     => 'required|string|max:255',
+            'present_address'   => 'required|string|max:255',
+            'permanent_address' => 'required|string|max:255',
+
+            'nid_no' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('applicants', 'nid_no')
+                    ->ignore($applicant->id, 'id')
+                    ->where(fn ($query) => $query->where('applicant_year', $applicant->applicant_year)),
+            ],
+
+            'email' => 'nullable|email|max:255',
+            'phone' => [
+                'required',
+                'digits_between:10,11',
+                Rule::unique('applicants',  'phone')
+                    ->ignore($applicant->id, 'id')
+                    ->where(fn ($query) => $query->where('applicant_year', $applicant->applicant_year)),
+            ],
+
+            'bank_name'    => 'required|string|max:255',
+            'pay_order_no' => 'required|string|max:255',
+            'amount'       => 'required|numeric',
+            'order_date'   => 'required|date',
+
+            // Images → optional during update
+            'applicant_image'          => 'nullable|image|max:2048',
+            'signature_image'          => 'nullable|image|max:2048',
+            'citizen_certificate_image'=> 'nullable|image|max:2048',
+            'category_proof_image'     => 'nullable|image|max:2048',
+            'nid_image'                => 'nullable|image|max:2048',
+            'py_order_image'           => 'nullable|image|max:2048',
+        ]);
+
+        // Convert date format if needed
+        if (!empty($validated['order_date'])) {
+            $validated['order_date'] = \Carbon\Carbon::parse($validated['order_date'])->format('Y-m-d');
+        }
+
+        // Handle file uploads (replace only if new file uploaded)
+        foreach ([
+            'applicant_image' => 'applicant',
+            'signature_image' => 'signature',
+            'nid_image'       => 'nid',
+            'py_order_image'  => 'order',
+            'citizen_certificate_image' => 'citizen_certificate',
+            'category_proof_image' => 'category_proof',
+        ] as $field => $folder) {
+
+            if ($request->hasFile($field)) {
+
+                // delete old file if exists
+                if ($applicant->$field && \Storage::disk('public')->exists($applicant->$field)) {
+                    \Storage::disk('public')->delete($applicant->$field);
+                }
+
+                $validated[$field] = $request->file($field)->store($folder, 'public');
+            }
+        }
+        
+        $applicant->update($validated);
+        return redirect()->route('home')->with('success', 'আপনার আবেদন সফলভাবে সম্পাদন হয়েছে!')
+        ->with('nid', $applicant->nid_no)
+        ->with('phone', $applicant->phone)
+        ->with('id', $applicant->id);
+    }
+
 
 }
