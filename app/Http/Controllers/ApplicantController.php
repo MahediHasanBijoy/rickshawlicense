@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApplicationSetting;
 use App\Models\Area;
 use App\Helpers\Helper;
 use BaconQrCode\Writer;
@@ -20,7 +21,8 @@ class ApplicantController extends Controller
     {
         $areas = Area::select('id', 'area_name')->get();
         $categories = Category::select('id', 'category_name')->get();
-        return view('applicant.apply', compact('areas', 'categories'));
+        $app_setting = ApplicationSetting::select('application_fee')->latest()->first();
+        return view('applicant.apply', compact('areas', 'categories','app_setting'));
     }
 
     public function store(Request $request)
@@ -174,7 +176,8 @@ class ApplicantController extends Controller
         $applicant = Applicant::findOrFail($id);
         $areas = Area::select('id', 'area_name')->get();
         $categories = Category::select('id', 'category_name')->get();
-        return view('applicant.edit', compact('applicant','areas', 'categories'));
+        $app_setting = ApplicationSetting::select('application_fee')->latest()->first();
+        return view('applicant.edit', compact('applicant','areas', 'categories','app_setting'));
     }
 
     public function update(Request $request, Applicant $applicant)
