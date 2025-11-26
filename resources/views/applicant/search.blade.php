@@ -30,7 +30,7 @@
     <h5 class="fw-bold mt-4 mb-3">আবেদনের অবস্থা</h5>
     <p><strong>{{ $applicant->status??'' }}</strong> </p>
     <hr>
-    <a href="{{ route('applicant.print', ['nid' => $applicant->nid, 'phone' => $applicant->phone]) }}" class="btn btn-success btn-lg mx-auto" target="_blank">
+    <a href="{{ route('applicant.print', ['id' => $applicant->id]) }}" class="btn btn-success btn-lg mx-auto" target="_blank">
         প্রিন্ট করুন
     </a>
     <button type="button" class="btn btn-secondary btn-lg mx-auto" id="close_search_card">
