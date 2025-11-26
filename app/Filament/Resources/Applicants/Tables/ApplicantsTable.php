@@ -7,6 +7,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Notifications\Notification;
 use Filament\Support\View\Components\BadgeComponent;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -126,9 +127,10 @@ class ApplicantsTable
                         $record->update([
                             'status' => 'selected',
                         ]);
+                        
                     })
                     ->color('warning')
-                    ->visible(fn($record)=>$record->status==='confirmed'),
+                    ->visible(fn($record)=>$record->status==='confirmed' && auth()->user()->hasRole('super_admin')),
                 Action::make('reject')
                     ->label('')
                     ->icon('heroicon-o-x-circle')
@@ -136,9 +138,10 @@ class ApplicantsTable
                         $record->update([
                             'status' => 'rejected',
                         ]);
+
                     })
                     ->color('danger')
-                    ->visible(fn($record)=>$record->status==='confirmed'),
+                    ->visible(fn($record)=>$record->status==='confirmed' && auth()->user()->hasRole('super_admin')),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

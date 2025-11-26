@@ -291,11 +291,23 @@
             </span>
         </div>
         @if ($applicant->license_number)
-        <div class="info-row">
-            <span class="info-label">লাইসেন্স নাম্বার:</span>
-            <span class="info-value">
-                {{ bn_number($applicant->license_number)  }} 
-            </span>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="info-row">
+                    <span class="info-label">লাইসেন্স নাম্বার:</span>
+                    <span class="info-value">
+                        {{ bn_number($applicant->license_number)  }} 
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="info-row">
+                    <span class="info-label">মেয়াদ:</span>
+                    <span class="info-value">
+                        {{ bn_number($applicant->expire_date)  }} ইং
+                    </span>
+                </div>
+            </div>
         </div>
         @endif
 

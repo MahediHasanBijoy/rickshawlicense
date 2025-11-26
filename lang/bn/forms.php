@@ -50,4 +50,9 @@ return [
     'application_fee'=>'আবেদন ফি',
     'app_expire_date'=>'আবেদনের শেষ তারিখ',
     'daily_fee'=>'দৈনিক ফি',
+    'fee_paid'=>'ফি পরিশোধিত?',
+    'security_paid'=>'সিকিউরিটি ফি পরিশোধিত?',
+    'is_security_refund'=>'সিকিউরিটি ফি ফেরত দিতে চান?',
+    'security_refundable'=>'ফেরত যোগ্য সিকিউরিটি',
+    'actor'=>'সম্পাদনকারী',
 ];

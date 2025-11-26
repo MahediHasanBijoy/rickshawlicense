@@ -5,49 +5,106 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use function Symfony\Component\Clock\now;
+
 class Payment extends Model
 {
     protected static function booted()
     {
         static::creating(function ($payment) {
-            $applicant = Applicant::find($payment->applicant_id);
-            $prefix = 'INV-' . now()->format('Y') . '-';
-            $lastpayment = self::where('invoice_no', 'like', $prefix . '%')->orderByDesc('invoice_no')->first();
-            $number = $lastpayment
-                ? ((int)substr($lastpayment->invoice_no , -4)) + 1
-                : 1;
-            $payment->invoice_no  = $prefix . str_pad($number, 4, '0', STR_PAD_LEFT);
-            $payment->fee_date = now()->format('Y-m-d');
-            $payment->yearly_fee = $applicant->amount ?? 0;
-            $payment->yearly_fee_date = $applicant->order_date;
-            $payment->created_by = auth()->id();
-            $payment->payment_date = now()->format('Y-m-d');
+            if ($payment->fee_paid==='yes') {
+                $settings=ApplicationSetting::latest()->first();
+                $applicant = Applicant::find($payment->applicant_id);
+                $prefix = 'INV-' . now()->format('Y') . '-';
+                $lastpayment = self::where('invoice_no', 'like', $prefix . '%')->orderByDesc('invoice_no')->first();
+                $number = $lastpayment
+                    ? ((int)substr($lastpayment->invoice_no , -4)) + 1
+                    : 1;
+                $payment->invoice_no  = $prefix . str_pad($number, 4, '0', STR_PAD_LEFT);
+                $payment->fee_date = now()->format('Y-m-d');
+                $payment->yearly_fee = $applicant->amount ?? 0;
+                $payment->security_payable = $settings->security_fee ?? 0;
+                $payment->security_refundable = $settings->security_fee_refund ?? 0;
+                $payment->yearly_fee_date = $applicant->order_date;
+                $payment->fee_paid='paid';
+                $payment->created_by = auth()->id();
+                $payment->payment_date = now()->format('Y-m-d');
+            }else{
+               return false;
+            }
 
         });
 
         static::saved(function ($payment) {
             $payment->updated_by = auth()->id();
             $applicant = Applicant::find($payment->applicant_id);
-            if ($applicant &&  $applicant->status == 'pending' && $payment->fee > 0) {
+            if ($applicant &&  $applicant->status == 'pending' && $payment->fee_paid ==='yes') {
                 $applicant->status = 'confirmed';
+                $applicant->confirm_date = now()->format('Y-m-d');
                 $applicant->confirmed_by  = auth()->id();
                 $applicant->save();
+                $payment->fee_paid='paid';
+                $payment->saveQuietly();
             }
-           if ($applicant &&  $applicant->status == 'selected') {
+            if ($applicant &&  ($applicant->status == 'confirmed' || $applicant->status == 'selected') && $payment->fee_paid ==='no') {
+                $applicant->status = 'pending';
+                $applicant->confirm_date = null;
+                $applicant->confirmed_by  = null;
+                $applicant->save();
+            }
+           if ($applicant &&  $applicant->status == 'selected' && $payment->security_paid==='yes') {
                 $payment->security_fee_by = auth()->id();
                 $payment->security_fee_date = now()->format('Y-m-d');
+                $payment->security_fee = $payment->security_payable;
+                $payment->security_paid='paid';
                 $payment->saveQuietly();
                  $applicant->status = 'approved';
                  $applicant->approved_by  = auth()->id();
                  $applicant->save();
             }
+            if ($applicant &&  $applicant->status == 'approved' && $payment->security_paid==='no') {
+                $payment->security_fee_by = null;
+                $payment->security_fee_date = null;
+                $payment->security_fee = 0;
+                $payment->security_paid='no';
+                $payment->saveQuietly();
+                $applicant->status = 'selected';
+                $applicant->approved_by  = null;
+                $applicant->save();
+            }
             if($applicant->status==='rejected' && $payment->is_yearly_fee_refund){
                 $payment->yearly_fee_refund_date = now()->format('Y-m-d');
                 $payment->yearly_fee_refund = $payment->yearly_fee;
+                $payment->yearly_fee=0;
                 $payment->yearly_fee_refund_by = auth()->id();
                 $payment->saveQuietly();
-                $applicant->status = 'refunded';
+                // $applicant->status = 'refunded';
                 $applicant->save();
+            }
+            if($applicant->status==='rejected' && !$payment->is_yearly_fee_refund){
+                $payment->yearly_fee_refund_date = null;
+                $payment->yearly_fee=$payment->yearly_fee_refund;
+                $payment->yearly_fee_refund = 0;
+                $payment->yearly_fee_refund_by = null;
+                $payment->is_yearly_fee_refund=false;
+                $payment->saveQuietly();
+                // $applicant->status = 'refunded';
+                // $applicant->save();
+            }
+            if($applicant && $applicant->status==='approved' && $payment->is_security_refund){
+                $payment->security_fee_refund=$payment->security_refundable;
+                $payment->security_fee=$payment->security_fee-$payment->security_refundable;
+                $payment->security_fee_refund_date=now()->format('Y-m-d');
+                $payment->security_fee_refund_by =auth()->id();
+                 $payment->saveQuietly();
+            }
+
+            if($applicant && $applicant->status==='approved' && !$payment->is_security_refund){
+                $payment->security_fee=$payment->security_fee+$payment->security_fee_refund;
+                $payment->security_fee_refund=0;
+                $payment->security_fee_refund_date=null;
+                $payment->security_fee_refund_by =null;
+                 $payment->saveQuietly();
             }
         });
     }
@@ -68,6 +125,16 @@ class Payment extends Model
     public function securityFeeBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'security_fee_by');
-    }   
+    } 
+
+    public function securityFeeRefundBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'security_fee_refund_by');
+    }
+    
+    public function yearlyFeeRefundBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'yearly_fee_refund_by');
+    }
 
 }
