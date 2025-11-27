@@ -253,7 +253,7 @@
                                 পরিমান<span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
-                                <input type="text" name="amount" class="form-control form-control-lg @error('amount') is-invalid @enderror" placeholder="" value="{{ old('amount') }}">
+                                <input type="text" name="amount" class="form-control form-control-lg @error('amount') is-invalid @enderror" placeholder="" value="{{ $app_setting->application_fee??'' }}" readonly>
                                 @error('amount')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -470,8 +470,8 @@
                 alert("NID বা মোবাইল নম্বর দিন");
                 return;
             }
-
-
+            // show loader
+            document.getElementById('searchLoader').classList.remove('d-none');
             fetch("{{ route('applicant.search') }}", {
                 method: "POST",
                 headers: {
@@ -485,6 +485,8 @@
             })
             .then(res => res.json())
             .then(data => {
+                // hide loader
+                document.getElementById('searchLoader').classList.add('d-none');
                 if (data.error) {
                     document.getElementById('searchError').innerHTML = data.error;
                     document.getElementById('searchError').classList.remove('d-none');

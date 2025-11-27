@@ -18,12 +18,12 @@
         .navbar-brand img {
             height: 60px;   /* Adjust logo size */
         }
-        @media (max-width: 390px) {
+        @media (max-width: 420px) {
             nav h5 {
                 font-size: 30px !important;
             }
             .navbar-brand img {
-                height: 50px;   /* Adjust logo size */
+                height: 45px!important;   /* Adjust logo size */
             }
         }
     </style>

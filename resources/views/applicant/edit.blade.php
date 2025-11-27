@@ -195,7 +195,7 @@
                                 পরিমান<span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
-                                <input type="text" name="amount" class="form-control form-control-lg @error('amount') is-invalid @enderror" placeholder="" value="{{ old('amount',$applicant->amount) }}">
+                                <input type="text" name="amount" class="form-control form-control-lg @error('amount') is-invalid @enderror" placeholder="" value="{{ old('amount',$applicant->amount) }}" readonly>
                                 @error('amount')
                                     <div class="invalid-feedback">
                                         {{ $message }}

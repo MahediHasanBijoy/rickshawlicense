@@ -33,6 +33,11 @@
     <a href="{{ route('applicant.print', ['id' => $applicant->id]) }}" class="btn btn-success btn-lg mx-auto" target="_blank">
         প্রিন্ট করুন
     </a>
+    @if($applicant->status=='pending')
+    <a href="{{ route('applicant.edit', ['id' => $applicant->id]) }}" class="btn btn-primary btn-lg">
+            সম্পাদনা করুন
+    </a>
+    @endif
     <button type="button" class="btn btn-secondary btn-lg mx-auto" id="close_search_card">
         ফিরে যান
     </button>
