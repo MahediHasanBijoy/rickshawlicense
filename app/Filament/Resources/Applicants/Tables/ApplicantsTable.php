@@ -39,6 +39,10 @@ class ApplicantsTable
                 TextColumn::make('nid_no')
                     ->label(__('forms.nid_no'))
                     ->searchable(),
+                TextColumn::make('category.category_name')
+                    ->label(__('forms.category_name'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
                 // TextColumn::make('email')
                 //     ->label(__('forms.email'))
                 //     ->searchable(),
