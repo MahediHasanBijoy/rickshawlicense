@@ -54,6 +54,16 @@ class ApplicantResource extends Resource
         ];
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return Applicant::query()->where('status','pending')->count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'warning';
+    }
+
     public static function getPages(): array
     {
         return [

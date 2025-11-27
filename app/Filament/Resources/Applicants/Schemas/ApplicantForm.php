@@ -180,7 +180,7 @@ class ApplicantForm
                                                 Select::make('fee_paid')
                                                 ->label(__('forms.fee_paid'))
                                                 ->options(function ($record) {
-                                                        if ($record->fee_paid === 'no') {
+                                                        if ($record?->fee_paid === 'no' || $record==null) {
                                                             return [
                                                                 'yes' => 'হ্যাঁ',
                                                                 'no' => 'না',
@@ -220,7 +220,7 @@ class ApplicantForm
                                                 Select::make('security_paid')
                                                     ->label(__('forms.security_paid'))
                                                     ->options(function ($record) {
-                                                        if ($record->security_paid === 'no') {
+                                                        if ($record?->security_paid === 'no') {
                                                             return [
                                                                 'yes' => 'হ্যাঁ',
                                                                 'no' => 'না',
@@ -245,7 +245,8 @@ class ApplicantForm
                                                     ,
                                             ])
                                             ->disabled(fn($record,$livewire)=>($record?->is_security_refund==true && auth()->user()->hasRole('super_admin'))
-                                                    || ($record?->security_paid=='paid' && auth()->user()->hasRole('admin')) || Carbon::parse($livewire->getRecord()->expire_date)->lt(now()))
+                                                    || ($record?->security_paid=='paid' && auth()->user()->hasRole('admin')) || (Carbon::parse($livewire->getRecord()->expire_date)->lt(now())
+                                                    && $livewire->getRecord()->expire_date !=null))
                                             ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'selected'
                                                     || $livewire->getRecord()?->status === 'approved')
                                             ->columnSpanFull(),
