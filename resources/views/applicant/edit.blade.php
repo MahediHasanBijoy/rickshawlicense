@@ -231,8 +231,29 @@
                                     </div>
                                 @enderror
                                 @if($applicant->applicant_image)
+                                @php
+                                    $filePath = $applicant->applicant_image;
+                                    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                                    $pdf_display = $extension=='pdf'?'':'display:none;';
+                                    $img_display = $extension!='pdf'?'':'display:none;';
+                                @endphp
                                     <div class="my-2" id="applicant_preview_box" >
-                                        <img src="{{ asset('storage/'.$applicant->applicant_image) }}" alt="Applicant Image" width="200" id="applicant_image_preview">
+                                            <!-- PDF Preview -->
+                                            <iframe 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                width="100%" 
+                                                height="300" 
+                                                style="border:1px solid #ccc;{{ $pdf_display }}"
+                                                id="applicant_pdf_preview">
+                                            </iframe>
+                                            <!-- Image Preview -->
+                                            <img 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                alt="Applicant Image" 
+                                                width="200"
+                                                style="{{ $img_display }}" 
+                                                id="applicant_image_preview">
+                                        <!-- <img src="{{ asset('storage/'.$applicant->applicant_image) }}" alt="Applicant Image" width="200" id="applicant_image_preview"> -->
                                     </div>
                                 @endif
                             </div>
@@ -252,10 +273,36 @@
                                 নাগরিক সনদ
                             </label>
                             <div class="ms-5">
-                                <input type="file" name="citizen_certificate_image" class="form-control form-control-lg" placeholder="" id="citizen_certificate_image">
+                                <input type="file" name="citizen_certificate_image" class="form-control form-control-lg @error('citizen_certificate_image') is-invalid @enderror" placeholder="" id="citizen_certificate_image">
+                                @error('citizen_certificate_image')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                                 @if($applicant->citizen_certificate_image)
+                                @php
+                                    $filePath = $applicant->citizen_certificate_image;
+                                    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                                    $pdf_display = $extension=='pdf'?'':'display:none;';
+                                    $img_display = $extension!='pdf'?'':'display:none;';
+                                @endphp
                                     <div class="my-2" id="citizen_preview_box" >
-                                        <img src="{{ asset('storage/'.$applicant->citizen_certificate_image) }}" alt="Citizen Certificate Image" width="200" id="citizen_image_preview">
+                                            <!-- PDF Preview -->
+                                            <iframe 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                width="100%" 
+                                                height="300" 
+                                                style="border:1px solid #ccc;{{ $pdf_display }}"
+                                                id="citizen_pdf_preview">
+                                            </iframe>
+                                            <!-- Image Preview -->
+                                            <img 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                alt="Applicant Image" 
+                                                width="200" 
+                                                style="{{ $img_display }}"
+                                                id="citizen_image_preview">
+                                        <!-- <img src="{{ asset('storage/'.$applicant->citizen_certificate_image) }}" alt="Citizen Certificate Image" width="200" id="citizen_image_preview"> -->
                                     </div>
                                 @endif
                             </div>
@@ -266,10 +313,36 @@
                                 ক্যাটাগরি প্রমানক
                             </label>
                             <div class="ms-5">
-                                <input type="file" name="category_proof_image" class="form-control form-control-lg" placeholder="" id="category_proof_image">
+                                <input type="file" name="category_proof_image" class="form-control form-control-lg @error('category_proof_image') is-invalid @enderror" placeholder="" id="category_proof_image">
+                                @error('category_proof_image')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                                 @if($applicant->category_proof_image)
+                                @php
+                                    $filePath = $applicant->category_proof_image;
+                                    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                                    $pdf_display = $extension=='pdf'?'':'display:none;';
+                                    $img_display = $extension!='pdf'?'':'display:none;';
+                                @endphp
                                     <div class="my-2" id="category_preview_box" >
-                                        <img src="{{ asset('storage/'.$applicant->category_proof_image) }}" alt="Category Proof Image" width="200" id="category_image_preview">
+                                            <!-- PDF Preview -->
+                                            <iframe 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                width="100%" 
+                                                height="300" 
+                                                style="border:1px solid #ccc;{{ $pdf_display }}"
+                                                id="category_pdf_preview">
+                                            </iframe>
+                                            <!-- Image Preview -->
+                                            <img 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                alt="Applicant Image" 
+                                                width="200" 
+                                                style="{{ $img_display }}"
+                                                id="category_image_preview">
+                                        <!-- <img src="{{ asset('storage/'.$applicant->category_proof_image) }}" alt="Category Proof Image" width="200" id="category_image_preview"> -->
                                     </div>
                                 @endif
                             </div>
@@ -287,8 +360,29 @@
                                     </div>
                                 @enderror
                                 @if($applicant->nid_image)
+                                @php
+                                    $filePath = $applicant->nid_image;
+                                    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                                    $pdf_display = $extension=='pdf'?'':'display:none;';
+                                    $img_display = $extension!='pdf'?'':'display:none;';
+                                @endphp
                                     <div class="my-2" id="nid_preview_box" >
-                                        <img src="{{ asset('storage/'.$applicant->nid_image) }}" alt="NID Image" width="200" id="nid_image_preview">
+                                            <!-- PDF Preview -->
+                                            <iframe 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                width="100%" 
+                                                height="300" 
+                                                style="border:1px solid #ccc;{{ $pdf_display }}"
+                                                id="nid_pdf_preview">
+                                            </iframe>
+                                            <!-- Image Preview -->
+                                            <img 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                alt="Applicant Image" 
+                                                width="200" 
+                                                style="{{ $img_display }}"
+                                                id="nid_image_preview">
+                                        <!-- <img src="{{ asset('storage/'.$applicant->nid_image) }}" alt="NID Image" width="200" id="nid_image_preview"> -->
                                     </div>
                                 @endif
                             </div>
@@ -298,10 +392,36 @@
                                 পে অর্ডারের ছবি
                             </label>
                             <div class="ms-5">
-                                <input type="file" name="py_order_image" class="form-control form-control-lg" placeholder="" id="py_order_image">
+                                <input type="file" name="py_order_image" class="form-control form-control-lg @error('py_order_image') is-invalid @enderror" placeholder="" id="py_order_image">
+                                @error('py_order_image')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                                 @if($applicant->py_order_image)
+                                @php
+                                    $filePath = $applicant->py_order_image;
+                                    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                                    $pdf_display = $extension=='pdf'?'':'display:none;';
+                                    $img_display = $extension!='pdf'?'':'display:none;';
+                                @endphp
                                     <div class="my-2"  id="pay_order_preview_box" >
-                                        <img src="{{ asset('storage/'.$applicant->py_order_image) }}" alt="Pay Order Image" width="200" id="pay_order_image_preview">
+                                            <!-- PDF Preview -->
+                                            <iframe 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                width="100%" 
+                                                height="300" 
+                                                style="border:1px solid #ccc;{{ $pdf_display }}"
+                                                id="pay_order_pdf_preview">
+                                            </iframe>
+                                            <!-- Image Preview -->
+                                            <img 
+                                                src="{{ asset('storage/'.$filePath) }}" 
+                                                alt="Applicant Image" 
+                                                width="200" 
+                                                style="{{ $img_display }}"
+                                                id="pay_order_image_preview">
+                                        <!-- <img src="{{ asset('storage/'.$applicant->py_order_image) }}" alt="Pay Order Image" width="200" id="pay_order_image_preview"> -->
                                     </div>
                                 @endif
                             </div>
@@ -322,36 +442,92 @@
             const [file] = e.target.files;
             if (file) {
                 document.getElementById('applicant_preview_box').style.display = 'block';
-                document.getElementById('applicant_image_preview').src = URL.createObjectURL(file);
+                if (file.type.startsWith("image/")) {
+                    document.getElementById('applicant_image_preview').style.display = "block";
+                    document.getElementById('applicant_pdf_preview').style.display = "none";
+                    document.getElementById('applicant_image_preview').src = URL.createObjectURL(file);
+                }else if (file.type === "application/pdf") {
+                    document.getElementById('applicant_image_preview').style.display = "none";
+                    document.getElementById('applicant_pdf_preview').style.display = "block";
+                    document.getElementById('applicant_pdf_preview').src = URL.createObjectURL(file);
+                }
+                //document.getElementById('applicant_image_preview').src = URL.createObjectURL(file);
             }
         });
         document.getElementById('citizen_certificate_image').addEventListener('change', function(e) {
             const [file] = e.target.files;
             if (file) {
                 document.getElementById('citizen_preview_box').style.display = 'block';
-                document.getElementById('citizen_image_preview').src = URL.createObjectURL(file);
+                if (file.type.startsWith("image/")) {
+                    document.getElementById('citizen_image_preview').style.display = "block";
+                    document.getElementById('citizen_pdf_preview').style.display = "none";
+                    document.getElementById('citizen_image_preview').src = URL.createObjectURL(file);
+                }else if (file.type === "application/pdf") {
+                    document.getElementById('citizen_image_preview').style.display = "none";
+                    document.getElementById('citizen_pdf_preview').style.display = "block";
+                    document.getElementById('citizen_pdf_preview').src = URL.createObjectURL(file);
+                }
+                //document.getElementById('citizen_image_preview').src = URL.createObjectURL(file);
             }
         });
         document.getElementById('category_proof_image').addEventListener('change', function(e) {
             const [file] = e.target.files;
             if (file) {
                 document.getElementById('category_preview_box').style.display = 'block';
-                document.getElementById('category_image_preview').src = URL.createObjectURL(file);
+                if (file.type.startsWith("image/")) {
+                    document.getElementById('category_image_preview').style.display = "block";
+                    document.getElementById('category_pdf_preview').style.display = "none";
+                    document.getElementById('category_image_preview').src = URL.createObjectURL(file);
+                }else if (file.type === "application/pdf") {
+                    document.getElementById('category_image_preview').style.display = "none";
+                    document.getElementById('category_pdf_preview').style.display = "block";
+                    document.getElementById('category_pdf_preview').src = URL.createObjectURL(file);
+                }
+                //document.getElementById('category_image_preview').src = URL.createObjectURL(file);
             }
         });
         document.getElementById('nid_image').addEventListener('change', function(e) {
             const [file] = e.target.files;
             if (file) {
                 document.getElementById('nid_preview_box').style.display = 'block';
-                document.getElementById('nid_image_preview').src = URL.createObjectURL(file);
+                if (file.type.startsWith("image/")) {
+                    document.getElementById('nid_image_preview').style.display = "block";
+                    document.getElementById('nid_pdf_preview').style.display = "none";
+                    document.getElementById('nid_image_preview').src = URL.createObjectURL(file);
+                }else if (file.type === "application/pdf") {
+                    document.getElementById('nid_image_preview').style.display = "none";
+                    document.getElementById('nid_pdf_preview').style.display = "block";
+                    document.getElementById('nid_pdf_preview').src = URL.createObjectURL(file);
+                }
+                //document.getElementById('nid_image_preview').src = URL.createObjectURL(file);
             }
         });
         document.getElementById('py_order_image').addEventListener('change', function(e) {
             const [file] = e.target.files;
             if (file) {
                 document.getElementById('pay_order_preview_box').style.display = 'block';
-                document.getElementById('pay_order_image_preview').src = URL.createObjectURL(file);
+                if (file.type.startsWith("image/")) {
+                    document.getElementById('pay_order_image_preview').style.display = "block";
+                    document.getElementById('pay_order_pdf_preview').style.display = "none";
+                    document.getElementById('pay_order_image_preview').src = URL.createObjectURL(file);
+                }else if (file.type === "application/pdf") {
+                    document.getElementById('pay_order_image_preview').style.display = "none";
+                    document.getElementById('pay_order_pdf_preview').style.display = "block";
+                    document.getElementById('pay_order_pdf_preview').src = URL.createObjectURL(file);
+                }
+                //document.getElementById('pay_order_image_preview').src = URL.createObjectURL(file);
             }
         });
     </script>
+    @if ($errors->any())
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let firstError = document.querySelector('.is-invalid');
+
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    </script>
+    @endif
 @endsection
