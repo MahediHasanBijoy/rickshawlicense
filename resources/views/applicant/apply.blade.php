@@ -615,4 +615,15 @@
             }
         });
     </script>
+    @if ($errors->any())
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let firstError = document.querySelector('.is-invalid');
+
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    </script>
+    @endif
 @endsection
