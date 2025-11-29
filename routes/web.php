@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\PrintReportController;
 use App\Http\Controllers\ReceiptController;
 
 Route::get('/', [ApplicantController::class, 'create'])->name('home');
@@ -16,4 +17,8 @@ Route::get('/application/print', [ApplicantController::class, 'print'])->name('a
 
 //Receipt Routes
 Route::get('/print-receipt', [ReceiptController::class, 'PrintReceipt'])->name('applicant.receipt');
+
+// Application Report Print Route
+Route::get('/application-report/print', [PrintReportController::class, 'PrintApplicationReport'])
+    ->name('application-report-print');
 
