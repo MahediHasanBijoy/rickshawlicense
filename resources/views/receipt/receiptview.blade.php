@@ -248,7 +248,7 @@
             <span class="info-value">
                 {{ bn_number($applicant->application_number) ?? '' }} 
             </span>
-            <span class="info-label" style="min-width: 50px;margin-left: 50px;">আবেদনের তারিখ:</span>
+            <span class="info-label">আবেদনের তারিখ:</span>
             <span class="info-value">
                  {{ bn_number(\Carbon\Carbon::parse($applicant->created_at)->format('d/m/Y')) }} (দিন/মাস/বছর) 
             </span>
@@ -509,9 +509,9 @@
     <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
     <script>
         window.print();
-        // window.onafterprint = function () {
-        //         window.close();
-        //     };
+        window.onafterprint = function () {
+                window.close();
+            };
     </script>
 </body>
 </html>
