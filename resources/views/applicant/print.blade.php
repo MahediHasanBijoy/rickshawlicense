@@ -209,6 +209,15 @@
             right: 20px;
             z-index: 1000;
         }
+
+        @media print {
+            .section-title, .data-table th {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                background: #f0f0f0 !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -394,6 +403,9 @@
     <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
     <script>
         window.print();
+        window.onafterprint = function () {
+            window.close();
+        };
     </script>
 </body>
 </html>
