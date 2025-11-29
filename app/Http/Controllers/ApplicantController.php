@@ -63,12 +63,77 @@ class ApplicantController extends Controller
             'order_date'        => 'required|date',
 
             // File validation
-            'applicant_image'   => 'required|image|max:2048',
+            'applicant_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             // 'signature_image'   => 'nullable|image|max:2048',
-            'citizen_certificate_image'   => 'nullable|image|max:2048',
-            'category_proof_image'   => 'nullable|image|max:2048',
-            'nid_image'         => 'required|image|max:2048',
-            'py_order_image'    => 'nullable|image|max:2048',
+            'citizen_certificate_image'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'category_proof_image'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'nid_image'         => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'py_order_image'    => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ],[
+            // Custom messages
+            // Area & Category
+            'area_id.required'  => 'এরিয়া নির্বাচন করুন।',
+            'area_id.exists'    => 'নির্বাচিত এরিয়া সঠিক নয়।',
+
+            'category_id.required' => 'ক্যাটাগরি নির্বাচন করুন।',
+            'category_id.exists'   => 'নির্বাচিত ক্যাটাগরি সঠিক নয়।',
+
+            // Applicant Information
+            'applicant_name.required' => 'আবেদনকারীর নাম প্রদান করুন।',
+            'applicant_name.string'   => 'আবেদনকারীর নাম অবশ্যই টেক্সট হতে হবে।',
+            'applicant_name.max'      => 'আবেদনকারীর নাম সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'guardian_name.required' => 'পিতা/স্বামীর নাম প্রদান করুন।',
+            'guardian_name.string'   => 'পিতা/স্বামীর নাম অবশ্যই টেক্সট হতে হবে।',
+            'guardian_name.max'      => 'পিতা/স্বামীর নাম সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'present_address.required' => 'বর্তমান ঠিকানা প্রদান করুন।',
+            'present_address.string'   => 'বর্তমান ঠিকানা অবশ্যই টেক্সট হতে হবে।',
+            'present_address.max'      => 'বর্তমান ঠিকানা সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'permanent_address.required' => 'স্থায়ী ঠিকানা প্রদান করুন।',
+            'permanent_address.string'   => 'স্থায়ী ঠিকানা অবশ্যই টেক্সট হতে হবে।',
+            'permanent_address.max'      => 'স্থায়ী ঠিকানা সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            // Email
+            'email.email' => 'সঠিক ইমেইল এড্রেস প্রদান করুন।',
+            'email.max'   => 'ইমেইল সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'nid_no.required' => 'NID নম্বর দিন।',
+            'nid_no.unique'   => 'এই NID দিয়ে ইতোমধ্যেই আবেদন করা হয়েছে।',
+
+            'phone.required'  => 'মোবাইল নম্বর দিন।',
+            'phone.unique'    => 'এই মোবাইল নম্বর দিয়ে ইতোমধ্যে আবেদন করা হয়েছে।',
+            'phone.digits_between' => 'মোবাইল নম্বর অবশ্যই ১০ থেকে ১১ ডিজিটের হতে হবে।',
+
+            'bank_name.required' => 'ব্যাংকের নাম প্রদান করুন।',
+            'bank_name.string'   => 'ব্যাংকের নাম অবশ্যই সঠিক টেক্সট হতে হবে।',
+            'bank_name.max'      => 'ব্যাংকের নাম সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'pay_order_no.required' => 'পে অর্ডার নম্বর প্রদান করুন।',
+            'pay_order_no.string'   => 'পে অর্ডার নম্বর অবশ্যই সঠিক টেক্সট হতে হবে।',
+            'pay_order_no.max'      => 'পে অর্ডার নম্বর সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'amount.required' => 'টাকার পরিমাণ প্রদান করুন।',
+            'amount.numeric'  => 'টাকার পরিমাণ অবশ্যই সংখ্যায় হতে হবে।',
+
+            'order_date.required' => 'অর্ডারের তারিখ নির্বাচন করুন।',
+            'order_date.date'     => 'অর্ডারের তারিখটি সঠিক ফরম্যাটে দিন।',
+
+            'applicant_image.required' => 'আবেদনকারীর ছবি আপলোড করুন।',
+            'applicant_image.mimes'    => 'আবেদনকারীর ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
+
+            'citizen_certificate_image.required' => 'নাগরিক সনদের ছবি আপলোড করুন।',
+            'citizen_certificate_image.mimes'    => 'নাগরিক সনদের ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
+
+            'category_proof_image.required' => 'ক্যাটাগরি প্রমানক ছবি আপলোড করুন।',
+            'citizen_certicategory_proof_imageficate_image.mimes'    => 'ক্যাটাগরি প্রমানক ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
+
+            'nid_image.required' => 'NID এর ছবি আপলোড করুন।',
+            'nid_image.mimes'    => 'NID ছবি অবশ্যই JPG, JPEG, PNG বা PDF হতে হবে।',
+
+            'py_order_image.required' => 'পে অর্ডারের ছবি আপলোড করুন।',
+            'py_order_image.mimes'    => 'পে অর্ডারের ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
         ]);
 
         // Convert date fields
@@ -222,12 +287,77 @@ class ApplicantController extends Controller
             'order_date'   => 'required|date',
 
             // Images → optional during update
-            'applicant_image'          => 'nullable|image|max:2048',
-            'signature_image'          => 'nullable|image|max:2048',
-            'citizen_certificate_image'=> 'nullable|image|max:2048',
-            'category_proof_image'     => 'nullable|image|max:2048',
-            'nid_image'                => 'nullable|image|max:2048',
-            'py_order_image'           => 'nullable|image|max:2048',
+            'applicant_image'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            // 'signature_image'          => 'nullable|image|max:2048',
+            'citizen_certificate_image'=> 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'category_proof_image'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'nid_image'                => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'py_order_image'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ],[
+            // Custom messages
+            // Area & Category
+            'area_id.required'  => 'এরিয়া নির্বাচন করুন।',
+            'area_id.exists'    => 'নির্বাচিত এরিয়া সঠিক নয়।',
+
+            'category_id.required' => 'ক্যাটাগরি নির্বাচন করুন।',
+            'category_id.exists'   => 'নির্বাচিত ক্যাটাগরি সঠিক নয়।',
+
+            // Applicant Information
+            'applicant_name.required' => 'আবেদনকারীর নাম প্রদান করুন।',
+            'applicant_name.string'   => 'আবেদনকারীর নাম অবশ্যই টেক্সট হতে হবে।',
+            'applicant_name.max'      => 'আবেদনকারীর নাম সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'guardian_name.required' => 'পিতা/স্বামীর নাম প্রদান করুন।',
+            'guardian_name.string'   => 'পিতা/স্বামীর নাম অবশ্যই টেক্সট হতে হবে।',
+            'guardian_name.max'      => 'পিতা/স্বামীর নাম সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'present_address.required' => 'বর্তমান ঠিকানা প্রদান করুন।',
+            'present_address.string'   => 'বর্তমান ঠিকানা অবশ্যই টেক্সট হতে হবে।',
+            'present_address.max'      => 'বর্তমান ঠিকানা সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'permanent_address.required' => 'স্থায়ী ঠিকানা প্রদান করুন।',
+            'permanent_address.string'   => 'স্থায়ী ঠিকানা অবশ্যই টেক্সট হতে হবে।',
+            'permanent_address.max'      => 'স্থায়ী ঠিকানা সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            // Email
+            'email.email' => 'সঠিক ইমেইল এড্রেস প্রদান করুন।',
+            'email.max'   => 'ইমেইল সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'nid_no.required' => 'NID নম্বর দিন।',
+            'nid_no.unique'   => 'এই NID দিয়ে ইতোমধ্যেই আবেদন করা হয়েছে।',
+
+            'phone.required'  => 'মোবাইল নম্বর দিন।',
+            'phone.unique'    => 'এই মোবাইল নম্বর দিয়ে ইতোমধ্যে আবেদন করা হয়েছে।',
+            'phone.digits_between' => 'মোবাইল নম্বর অবশ্যই ১০ থেকে ১১ ডিজিটের হতে হবে।',
+
+            'bank_name.required' => 'ব্যাংকের নাম প্রদান করুন।',
+            'bank_name.string'   => 'ব্যাংকের নাম অবশ্যই সঠিক টেক্সট হতে হবে।',
+            'bank_name.max'      => 'ব্যাংকের নাম সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'pay_order_no.required' => 'পে অর্ডার নম্বর প্রদান করুন।',
+            'pay_order_no.string'   => 'পে অর্ডার নম্বর অবশ্যই সঠিক টেক্সট হতে হবে।',
+            'pay_order_no.max'      => 'পে অর্ডার নম্বর সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
+
+            'amount.required' => 'টাকার পরিমাণ প্রদান করুন।',
+            'amount.numeric'  => 'টাকার পরিমাণ অবশ্যই সংখ্যায় হতে হবে।',
+
+            'order_date.required' => 'অর্ডারের তারিখ নির্বাচন করুন।',
+            'order_date.date'     => 'অর্ডারের তারিখটি সঠিক ফরম্যাটে দিন।',
+
+            'applicant_image.required' => 'আবেদনকারীর ছবি আপলোড করুন।',
+            'applicant_image.mimes'    => 'আবেদনকারীর ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
+
+            'citizen_certificate_image.required' => 'নাগরিক সনদের ছবি আপলোড করুন।',
+            'citizen_certificate_image.mimes'    => 'নাগরিক সনদের ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
+
+            'category_proof_image.required' => 'ক্যাটাগরি প্রমানক ছবি আপলোড করুন।',
+            'citizen_certicategory_proof_imageficate_image.mimes'    => 'ক্যাটাগরি প্রমানক ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
+
+            'nid_image.required' => 'NID এর ছবি আপলোড করুন।',
+            'nid_image.mimes'    => 'NID ছবি অবশ্যই JPG, JPEG, PNG বা PDF হতে হবে।',
+
+            'py_order_image.required' => 'পে অর্ডারের ছবি আপলোড করুন।',
+            'py_order_image.mimes'    => 'পে অর্ডারের ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
         ]);
 
         // Convert date format if needed
