@@ -18,10 +18,10 @@ use UnitEnum;
 class ApplicationSettingResource extends Resource
 {
     protected static ?string $model = ApplicationSetting::class;
-
+    protected static string|UnitEnum|null $navigationGroup = 'সেটিংস';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Cog8Tooth;
 
-     protected static string|UnitEnum|null $navigationGroup = 'সেটিংস';
+     
 
     public static function getModelLabel(): string
     {

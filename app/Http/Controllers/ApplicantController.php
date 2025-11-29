@@ -21,7 +21,7 @@ class ApplicantController extends Controller
     {
         $areas = Area::select('id', 'area_name')->get();
         $categories = Category::select('id', 'category_name')->get();
-        $app_setting = ApplicationSetting::select('application_fee')->latest()->first();
+        $app_setting = ApplicationSetting::latest()->first();
         return view('applicant.apply', compact('areas', 'categories','app_setting'));
     }
 

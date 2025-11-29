@@ -104,23 +104,29 @@ class ApplicantForm
                                     
                                     FileUpload::make('nid_image')
                                         ->label(__('forms.nid_image'))
-                                        ->image()
-                                        ->imageEditor()
+                                        ->acceptedFileTypes(['image/*', 'application/pdf'])
+                                        ->previewable(true) // allow preview
+                                        ->openable()    // enable open in new tab
+                                        ->downloadable()
                                         ->disk('public')
                                         ->directory('applicants/nid')
                                         ->required(),
 
                                     FileUpload::make('citizen_certificate_image')
                                         ->label(__('forms.citizen_certificate_image'))
-                                        ->image()
-                                        ->imageEditor()
+                                        ->acceptedFileTypes(['image/*', 'application/pdf'])
+                                        ->previewable(true) // allow preview
+                                        ->openable()    // enable open in new tab
+                                        ->downloadable()
                                         ->disk('public')
                                         ->directory('citizen_certificate'),
 
                                     FileUpload::make('category_proof_image')
                                         ->label(__('forms.category_proof_image'))
-                                        ->image()
-                                        ->imageEditor()
+                                        ->acceptedFileTypes(['image/*', 'application/pdf'])
+                                        ->previewable(true) // allow preview
+                                        ->openable()    // enable open in new tab
+                                        ->downloadable()
                                         ->disk('public')
                                         ->directory('category_proof'),
                             ])
@@ -160,8 +166,10 @@ class ApplicantForm
                                     
                                     FileUpload::make('py_order_image')
                                         ->label(__('forms.py_order_image'))
-                                        ->image()
-                                        ->imageEditor()
+                                        ->acceptedFileTypes(['image/*', 'application/pdf'])
+                                        ->previewable(true) // allow preview
+                                        ->openable()    // enable open in new tab
+                                        ->downloadable()
                                         ->required()
                                         ->disk('public')
                                         ->directory('pay_order'),
