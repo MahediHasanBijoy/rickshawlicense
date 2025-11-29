@@ -69,7 +69,7 @@
         }
 
         .info-label {
-            min-width: 180px;
+            min-width: 100px;
             font-weight: 600;
             flex-shrink: 0;
         }
@@ -248,10 +248,7 @@
             <span class="info-value">
                 {{ bn_number($applicant->application_number) ?? '' }} 
             </span>
-        </div>
-
-        <div class="info-row">
-            <span class="info-label">আবেদনের তারিখ:</span>
+            <span class="info-label" style="min-width: 50px;margin-left: 50px;">আবেদনের তারিখ:</span>
             <span class="info-value">
                  {{ bn_number(\Carbon\Carbon::parse($applicant->created_at)->format('d/m/Y')) }} (দিন/মাস/বছর) 
             </span>
@@ -291,23 +288,15 @@
             </span>
         </div>
         @if ($applicant->license_number)
-        <div class="row">
-            <div class="col-md-6">
-                <div class="info-row">
-                    <span class="info-label">লাইসেন্স নাম্বার:</span>
-                    <span class="info-value">
-                        {{ bn_number($applicant->license_number)  }} 
-                    </span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="info-row">
-                    <span class="info-label">মেয়াদ:</span>
-                    <span class="info-value">
-                        {{ bn_number($applicant->expire_date)  }} ইং
-                    </span>
-                </div>
-            </div>
+        <div class="info-row">
+            <span class="info-label">লাইসেন্স নাম্বার:</span>
+            <span class="info-value">
+                {{ bn_number($applicant->license_number)  }} 
+            </span>
+            <span class="info-label" style="min-width: 50px;margin-left: 50px;">মেয়াদ:</span>
+            <span class="info-value">
+                {{ bn_number($applicant->expire_date)  }} ইং
+            </span>
         </div>
         @endif
 
@@ -520,9 +509,9 @@
     <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
     <script>
         window.print();
-        window.onafterprint = function () {
-                window.close();
-            };
+        // window.onafterprint = function () {
+        //         window.close();
+        //     };
     </script>
 </body>
 </html>
