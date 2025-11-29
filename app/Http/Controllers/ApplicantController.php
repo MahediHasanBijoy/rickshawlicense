@@ -151,11 +151,11 @@ class ApplicantController extends Controller
         }
 
         if ($request->hasFile('nid_image')) {
-            $validated['nid_image'] = $request->file('nid_image')->store('applicants/nid', 'public');
+            $validated['nid_image'] = $request->file('nid_image')->store('nid', 'public');
         }
 
         if ($request->hasFile('py_order_image')) {
-            $validated['py_order_image'] = $request->file('py_order_image')->store('pay_order', 'public');
+            $validated['py_order_image'] = $request->file('py_order_image')->store('order', 'public');
         }
 
         if ($request->hasFile('citizen_certificate_image')) {
@@ -372,8 +372,8 @@ class ApplicantController extends Controller
         foreach ([
             'applicant_image' => 'applicant',
             'signature_image' => 'signature',
-            'nid_image'       => 'applicants/nid',
-            'py_order_image'  => 'pay_order',
+            'nid_image'       => 'nid',
+            'py_order_image'  => 'order',
             'citizen_certificate_image' => 'citizen_certificate',
             'category_proof_image' => 'category_proof',
         ] as $field => $folder) {
