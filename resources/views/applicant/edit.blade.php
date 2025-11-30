@@ -253,20 +253,28 @@
                                                 width="200"
                                                 style="{{ $img_display }}" 
                                                 id="applicant_image_preview">
-                                        <!-- <img src="{{ asset('storage/'.$applicant->applicant_image) }}" alt="Applicant Image" width="200" id="applicant_image_preview"> -->
+                                    </div>
+                                @else
+                                    <div class="my-2" id="applicant_preview_box" >
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;display:none;"
+                                            id="applicant_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="" 
+                                            alt="Applicant Image" 
+                                            width="200"
+                                            style="display:none;" 
+                                            id="applicant_image_preview">
                                     </div>
                                 @endif
                             </div>
                         </div>
-
-                        <!-- <div class=" mb-3 align-items-center">
-                            <label class="col-form-label fw-bold">
-                                স্বাক্ষর
-                            </label>
-                            <div class="ms-5">
-                                <input type="file" name="signature_image" class="form-control form-control-lg" placeholder="">
-                            </div>
-                        </div> -->
 
                         <div class=" mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
@@ -287,22 +295,39 @@
                                     $img_display = $extension!='pdf'?'':'display:none;';
                                 @endphp
                                     <div class="my-2" id="citizen_preview_box" >
-                                            <!-- PDF Preview -->
-                                            <iframe 
-                                                src="{{ asset('storage/'.$filePath) }}" 
-                                                width="100%" 
-                                                height="300" 
-                                                style="border:1px solid #ccc;{{ $pdf_display }}"
-                                                id="citizen_pdf_preview">
-                                            </iframe>
-                                            <!-- Image Preview -->
-                                            <img 
-                                                src="{{ asset('storage/'.$filePath) }}" 
-                                                alt="Applicant Image" 
-                                                width="200" 
-                                                style="{{ $img_display }}"
-                                                id="citizen_image_preview">
-                                        <!-- <img src="{{ asset('storage/'.$applicant->citizen_certificate_image) }}" alt="Citizen Certificate Image" width="200" id="citizen_image_preview"> -->
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;{{ $pdf_display }}"
+                                            id="citizen_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            alt="Citizen Image" 
+                                            width="200" 
+                                            style="{{ $img_display }}"
+                                            id="citizen_image_preview">
+                                    </div>
+                                @else
+                                    <div class="my-2" id="citizen_preview_box" >
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;display:none;"
+                                            id="citizen_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="" 
+                                            alt="Citizen Image" 
+                                            width="200" 
+                                            style="display:none;"
+                                            id="citizen_image_preview">
                                     </div>
                                 @endif
                             </div>
@@ -327,22 +352,39 @@
                                     $img_display = $extension!='pdf'?'':'display:none;';
                                 @endphp
                                     <div class="my-2" id="category_preview_box" >
-                                            <!-- PDF Preview -->
-                                            <iframe 
-                                                src="{{ asset('storage/'.$filePath) }}" 
-                                                width="100%" 
-                                                height="300" 
-                                                style="border:1px solid #ccc;{{ $pdf_display }}"
-                                                id="category_pdf_preview">
-                                            </iframe>
-                                            <!-- Image Preview -->
-                                            <img 
-                                                src="{{ asset('storage/'.$filePath) }}" 
-                                                alt="Applicant Image" 
-                                                width="200" 
-                                                style="{{ $img_display }}"
-                                                id="category_image_preview">
-                                        <!-- <img src="{{ asset('storage/'.$applicant->category_proof_image) }}" alt="Category Proof Image" width="200" id="category_image_preview"> -->
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;{{ $pdf_display }}"
+                                            id="category_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            alt="Applicant Image" 
+                                            width="200" 
+                                            style="{{ $img_display }}"
+                                            id="category_image_preview">
+                                    </div>
+                                @else
+                                    <div class="my-2" id="category_preview_box" >
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;display:none;"
+                                            id="category_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="" 
+                                            alt="Applicant Image" 
+                                            width="200" 
+                                            style="display:none;"
+                                            id="category_image_preview">
                                     </div>
                                 @endif
                             </div>
@@ -367,29 +409,46 @@
                                     $img_display = $extension!='pdf'?'':'display:none;';
                                 @endphp
                                     <div class="my-2" id="nid_preview_box" >
-                                            <!-- PDF Preview -->
-                                            <iframe 
-                                                src="{{ asset('storage/'.$filePath) }}" 
-                                                width="100%" 
-                                                height="300" 
-                                                style="border:1px solid #ccc;{{ $pdf_display }}"
-                                                id="nid_pdf_preview">
-                                            </iframe>
-                                            <!-- Image Preview -->
-                                            <img 
-                                                src="{{ asset('storage/'.$filePath) }}" 
-                                                alt="Applicant Image" 
-                                                width="200" 
-                                                style="{{ $img_display }}"
-                                                id="nid_image_preview">
-                                        <!-- <img src="{{ asset('storage/'.$applicant->nid_image) }}" alt="NID Image" width="200" id="nid_image_preview"> -->
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;{{ $pdf_display }}"
+                                            id="nid_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            alt="Nid Image" 
+                                            width="200" 
+                                            style="{{ $img_display }}"
+                                            id="nid_image_preview">
+                                    </div>
+                                @else
+                                    <div class="my-2" id="nid_preview_box" >
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;display:none;"
+                                            id="nid_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="" 
+                                            alt="Nid Image" 
+                                            width="200" 
+                                            style="display:none;"
+                                            id="nid_image_preview">
                                     </div>
                                 @endif
                             </div>
                         </div>
                         <div class="mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
-                                পে অর্ডারের ছবি
+                                পে অর্ডারের ছবি<span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
                                 <input type="file" name="py_order_image" class="form-control form-control-lg @error('py_order_image') is-invalid @enderror" placeholder="" id="py_order_image">
@@ -406,22 +465,39 @@
                                     $img_display = $extension!='pdf'?'':'display:none;';
                                 @endphp
                                     <div class="my-2"  id="pay_order_preview_box" >
-                                            <!-- PDF Preview -->
-                                            <iframe 
-                                                src="{{ asset('storage/'.$filePath) }}" 
-                                                width="100%" 
-                                                height="300" 
-                                                style="border:1px solid #ccc;{{ $pdf_display }}"
-                                                id="pay_order_pdf_preview">
-                                            </iframe>
-                                            <!-- Image Preview -->
-                                            <img 
-                                                src="{{ asset('storage/'.$filePath) }}" 
-                                                alt="Applicant Image" 
-                                                width="200" 
-                                                style="{{ $img_display }}"
-                                                id="pay_order_image_preview">
-                                        <!-- <img src="{{ asset('storage/'.$applicant->py_order_image) }}" alt="Pay Order Image" width="200" id="pay_order_image_preview"> -->
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;{{ $pdf_display }}"
+                                            id="pay_order_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            alt="Pay Order Image" 
+                                            width="200" 
+                                            style="{{ $img_display }}"
+                                            id="pay_order_image_preview">
+                                    </div>
+                                @else
+                                    <div class="my-2"  id="pay_order_preview_box" >
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;display:none;"
+                                            id="pay_order_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="" 
+                                            alt="Pay Order Image" 
+                                            width="200" 
+                                            style="display:none;"
+                                            id="pay_order_image_preview">
                                     </div>
                                 @endif
                             </div>

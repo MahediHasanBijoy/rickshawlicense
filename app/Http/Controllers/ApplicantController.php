@@ -68,7 +68,7 @@ class ApplicantController extends Controller
             'citizen_certificate_image'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'category_proof_image'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'nid_image'         => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'py_order_image'    => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'py_order_image'    => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ],[
             // Custom messages
             // Area & Category
@@ -127,7 +127,7 @@ class ApplicantController extends Controller
             'citizen_certificate_image.mimes'    => 'নাগরিক সনদের ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
 
             'category_proof_image.required' => 'ক্যাটাগরি প্রমানক ছবি আপলোড করুন।',
-            'citizen_certicategory_proof_imageficate_image.mimes'    => 'ক্যাটাগরি প্রমানক ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
+            'category_proof_image.mimes'    => 'ক্যাটাগরি প্রমানক ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
 
             'nid_image.required' => 'NID এর ছবি আপলোড করুন।',
             'nid_image.mimes'    => 'NID ছবি অবশ্যই JPG, JPEG, PNG বা PDF হতে হবে।',
@@ -239,6 +239,9 @@ class ApplicantController extends Controller
     public function edit($id)
     {
         $applicant = Applicant::findOrFail($id);
+        if($applicant->status!='pending'){
+            return redirect()->route('home');
+        }
         $areas = Area::select('id', 'area_name')->get();
         $categories = Category::select('id', 'category_name')->get();
         $app_setting = ApplicationSetting::select('application_fee')->latest()->first();
@@ -351,7 +354,7 @@ class ApplicantController extends Controller
             'citizen_certificate_image.mimes'    => 'নাগরিক সনদের ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
 
             'category_proof_image.required' => 'ক্যাটাগরি প্রমানক ছবি আপলোড করুন।',
-            'citizen_certicategory_proof_imageficate_image.mimes'    => 'ক্যাটাগরি প্রমানক ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
+            'category_proof_image.mimes'    => 'ক্যাটাগরি প্রমানক ছবি অবশ্যই JPG, JPEG, PNG অথবা PDF হতে হবে।',
 
             'nid_image.required' => 'NID এর ছবি আপলোড করুন।',
             'nid_image.mimes'    => 'NID ছবি অবশ্যই JPG, JPEG, PNG বা PDF হতে হবে।',

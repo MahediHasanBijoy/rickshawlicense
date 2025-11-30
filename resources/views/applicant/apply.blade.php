@@ -359,7 +359,7 @@
                         </div>
                         <div class="mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
-                                পে অর্ডারের ছবি
+                                পে অর্ডারের ছবি<span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
                                 <input type="file" name="py_order_image" class="form-control form-control-lg @error('py_order_image') is-invalid @enderror" placeholder="" id="py_order_image">
