@@ -3,10 +3,12 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Area;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\ChartWidget;
 
 class AreaWiseApprovedRickshaw extends ChartWidget
 {
+    use HasWidgetShield;
     protected ?string $heading = 'এরিয়া ভিত্তিক অনুমোদিত রিক্সার রিপোর্ট';
     protected static ?int $sort=3;
     protected static bool $isLazy = false;

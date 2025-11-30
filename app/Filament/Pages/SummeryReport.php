@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Helpers\Helper;
 use App\Models\Payment;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -22,6 +23,7 @@ use UnitEnum;
 class SummeryReport extends Page implements HasTable, HasForms
 {
     use InteractsWithTable, InteractsWithForms;
+    use HasPageShield;
     protected string $view = 'filament.pages.summery-report';
 
     protected static ?string $navigationLabel = 'সামারি রিপোর্ট';

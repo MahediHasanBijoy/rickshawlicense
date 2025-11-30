@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Helpers\Helper;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -22,6 +23,7 @@ use function Symfony\Component\Clock\now;
 class ApplicationReport extends Page implements HasTable, HasForms
 {
     use InteractsWithTable, InteractsWithForms;
+    use HasPageShield;
     protected string $view = 'filament.pages.application-report';
 
     protected static ?string $navigationLabel = 'আবেদন রিপোর্ট';
@@ -41,12 +43,7 @@ class ApplicationReport extends Page implements HasTable, HasForms
         return 'আবেদন রিপোর্ট';
     }
 
-    public static function getPermissionSlug(): string
-    {
-        return 'page_application_report';
-    }
-
-
+    
     public function mount()
     {
         $this->year = now()->format('Y');

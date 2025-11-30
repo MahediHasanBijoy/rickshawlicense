@@ -3,10 +3,12 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Category;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\ChartWidget;
 
 class CategoryWiseApprovedRickshaw extends ChartWidget
 {
+    use HasWidgetShield;
     protected ?string $heading = 'ক্যাটাগরি ভিত্তিক অনুমোদিত রিক্সার রিপোর্ট';
     protected static ?int $sort=2;
     protected static bool $isLazy = false;

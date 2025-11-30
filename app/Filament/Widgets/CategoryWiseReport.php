@@ -3,10 +3,12 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Category;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\ChartWidget;
 
 class CategoryWiseReport extends ChartWidget
 {
+    use HasWidgetShield;
     protected ?string $heading = 'ক্যাটাগরি ভিত্তিক আবেদন রিপোর্ট';
     protected static ?int $sort=0;
     protected static bool $isLazy = false;

@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Helpers\Helper;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -21,6 +22,7 @@ use UnitEnum;
 class CategoryWiseApplicationReport extends Page implements HasTable, HasForms
 {
     use InteractsWithTable, InteractsWithForms;
+    use HasPageShield;
     protected string $view = 'filament.pages.category-wise-application-report';
 
     protected static ?string $navigationLabel = 'ক্যাটাগরি ভিত্তিক রিপোর্ট';

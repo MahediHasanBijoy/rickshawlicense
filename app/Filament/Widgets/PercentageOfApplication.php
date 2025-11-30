@@ -3,10 +3,12 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Applicant;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\ChartWidget;
 
 class PercentageOfApplication extends ChartWidget
 {
+    use HasWidgetShield;
     protected ?string $heading = 'মোট আবেদনের উপর স্ট্যাটাস ভিত্তিক হার %';
     protected static ?int $sort=1;
     protected static bool $isLazy = false;
