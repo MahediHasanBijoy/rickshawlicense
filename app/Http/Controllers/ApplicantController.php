@@ -155,7 +155,7 @@ class ApplicantController extends Controller
         }
 
         if ($request->hasFile('py_order_image')) {
-            $validated['py_order_image'] = $request->file('py_order_image')->store('order', 'public');
+            $validated['py_order_image'] = $request->file('py_order_image')->store('pay_order', 'public');
         }
 
         if ($request->hasFile('citizen_certificate_image')) {
