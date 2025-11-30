@@ -35,10 +35,17 @@ class ApplicationReport extends Page implements HasTable, HasForms
     public ?string $application_status = null;
     public ?string $year = null;
 
+
     public function getTitle(): string
     {
         return 'আবেদন রিপোর্ট';
     }
+
+    public static function getPermissionSlug(): string
+    {
+        return 'page_application_report';
+    }
+
 
     public function mount()
     {
