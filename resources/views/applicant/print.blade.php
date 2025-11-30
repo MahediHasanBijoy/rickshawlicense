@@ -21,6 +21,7 @@
         }
 
         .print-container {
+            position: relative; /* for watermark */
             width: 210mm;
             min-height: 297mm;
             margin: 0 auto;
@@ -28,7 +29,33 @@
             background: white;
             position: relative;
         }
-
+        /* for watermark */
+        .print-container::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%; /* Adjust size as needed */
+            height: 50%; /* Adjust size as needed */
+            background-image: url('{{ asset("images/rickshaw.png") }}');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.1; /* Adjust transparency (0.1 = 10% visible) */
+            z-index: 0;
+            pointer-events: none;
+        }
+        .print-container > * {
+            position: relative;
+            z-index: 1;
+        }
+        @media print {
+            .print-container::before {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
         .header-info {
             text-align: left;
             font-size: 10pt;
@@ -222,16 +249,7 @@
 </head>
 <body>
     <div class="print-container">
-        <!-- Photo Box (Top Right) -->
-        <!-- <div class="photo-box no-print" style="line-height: normal; padding: 5px;">
-            {{-- Uncomment and use when you have the image --}}
-            @if($applicant->applicant_image)
-                <img src="{{ asset('storage/' . $applicant->applicant_image) }}" alt="Photo">
-            @else 
-                <small style="display: block; margin-top: 50px;">ছবি</small>
-            @endif
-        </div> -->
-
+        
         <!-- Header Information -->
         <div class="header-info">
             <img src="{{ asset('images/logo.png') }}" alt="Photo" style="max-height:70px;">

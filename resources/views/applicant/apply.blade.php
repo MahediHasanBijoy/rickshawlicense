@@ -53,7 +53,9 @@
         </ul>
     </section>
     <div class="text-center mb-2" id="showFormBtnContainer">
+        @if(\Carbon\Carbon::parse($app_setting->app_expire_date)->greaterThanOrEqualTo(today()))
         <button id="showFormBtn" class="btn btn-primary btn-lg">আবেদন করুন</button>
+        @endif
         <!-- @if($errors->any())
             <div class="alert alert-danger">
                 <ul>
