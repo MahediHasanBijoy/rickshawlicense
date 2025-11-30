@@ -57,8 +57,11 @@ class Payment extends Model
                 $applicant->confirmed_by  = auth()->id();
                 $applicant->save();
                 $payment->fee_paid='paid';
+                $payment->fee_date = now()->format('Y-m-d');
                 $payment->total_paid=($payment->fee_paid=='paid' ? $payment->fee : 0 ) + 
                 $payment->getOriginal('security_fee') + $payment->getOriginal('yearly_fee');
+                $payment->created_by = auth()->id();
+                $payment->payment_date = now()->format('Y-m-d');
                 $payment->saveQuietly();
             }
             if ($applicant &&  ($applicant->status == 'confirmed' || $applicant->status == 'selected') && $payment->fee_paid ==='no') {
@@ -66,9 +69,14 @@ class Payment extends Model
                 $applicant->confirm_date = null;
                 $applicant->confirmed_by  = null;
                 $applicant->save();
-                $payment->total_paid=$payment->fee_paid=='paid'  ? $payment->fee : 0 + 
-                $payment->getOriginal('security_fee') + $payment->getOriginal('yearly_fee');
-                $payment->saveQuietly();
+                $payment->deleteQuietly();
+                // $payment->total_paid=0;
+                // // $payment->fee_paid=='paid'  ? $payment->fee : 0 + 
+                // // $payment->getOriginal('security_fee') + $payment->getOriginal('yearly_fee');
+                // $payment->fee_date = now()->format('Y-m-d');
+                // $payment->created_by = null;
+                // // $payment->payment_date = null;
+                // $payment->saveQuietly();
             }
             //Security update and calculation
 

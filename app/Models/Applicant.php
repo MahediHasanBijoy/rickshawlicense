@@ -31,6 +31,28 @@ class Applicant extends Model
             $application->applicaton_date = now()->format('Y-m-d');
             $application->applicant_year = now()->year;
         });
+        // static::created(function($application){
+        //         $settings=ApplicationSetting::latest()->first();
+        //         // $applicant = Applicant::find($payment->applicant_id);
+        //         $prefix = 'INV-' . now()->format('Y') . '-';
+        //         $lastpayment = Payment::where('invoice_no', 'like', $prefix . '%')->orderByDesc('invoice_no')->first();
+        //         $number = $lastpayment
+        //             ? ((int)substr($lastpayment->invoice_no , -4)) + 1
+        //             : 1;
+        //      $application->payment()->create([
+        //         'invoice_no'         => $prefix . str_pad($number, 4, '0', STR_PAD_LEFT),
+        //         'fee'               =>$settings->application_fee,
+        //         'yearly_fee'         => $application->amount ?? 0,
+        //         'security_payable'   => $settings->security_fee ?? 0,
+        //         'security_refundable'=> $settings->security_fee_refund ?? 0,
+        //         'yearly_fee_date'    => $application->order_date,
+        //         // 'fee_date' => now()->format('Y-m-d'),
+        //         // 'fee_paid' => 'paid',
+        //         // 'created_by' => auth()->id(),
+        //          'payment_date' => now()->format('Y-m-d'),
+        //     ]);
+
+        // });
 
          static::updated(function ($application) {
 

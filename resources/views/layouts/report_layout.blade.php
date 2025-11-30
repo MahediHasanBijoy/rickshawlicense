@@ -71,7 +71,7 @@
         }
     </style>
 </head>   
-<body class="">
+<body class="print-container">
     
     <div class="mt-4">
         @yield('main_content')

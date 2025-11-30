@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Helpers\Helper;
+use App\Models\Payment;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -15,29 +16,27 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use pxlrbt\FilamentExcel\Actions\ExportAction;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use Rakibhstu\Banglanumber\NumberToBangla;
 use UnitEnum;
 
-use function Symfony\Component\Clock\now;
-
-class ApplicationReport extends Page implements HasTable, HasForms
+class SummeryReport extends Page implements HasTable, HasForms
 {
     use InteractsWithTable, InteractsWithForms;
-    protected string $view = 'filament.pages.application-report';
+    protected string $view = 'filament.pages.summery-report';
 
-    protected static ?string $navigationLabel = 'আবেদন রিপোর্ট';
+    protected static ?string $navigationLabel = 'সামারি রিপোর্ট';
 
     protected static string | UnitEnum | null $navigationGroup = 'রিপোর্ট সমূহ';
     
-    protected static string|\BackedEnum|null $navigationIcon = Heroicon::ClipboardDocumentList;
+    protected static string|\BackedEnum|null $navigationIcon = Heroicon::BookOpen;
 
     public ?int $area_id = null;
     public ?int $category_id = null;
-    public ?string $application_status = null;
     public ?string $year = null;
 
     public function getTitle(): string
     {
-        return 'আবেদন রিপোর্ট';
+        return 'সামারি রিপোর্ট';
     }
 
     public function mount()
@@ -56,22 +55,13 @@ class ApplicationReport extends Page implements HasTable, HasForms
                         ->options(\App\Models\Area::all()->pluck('area_name', 'id')->toArray())
                         ->placeholder('সকল এলাকা')
                         ->reactive(),
+
                     Select::make('category_id')
                         ->label('ক্যাটাগরি')
                         ->options(\App\Models\Category::all()->pluck('category_name', 'id')->toArray())
                         ->placeholder('সকল ক্যাটাগরি')
                         ->reactive(),
-                    Select::make('application_status')
-                        ->label('আবেদনের অবস্থা')
-                        ->options([
-                            'pending' => 'বিচারাধীন',
-                            'confirmed' => 'গ্রহনকৃত',
-                            'approved' => 'অনুমোদিত',
-                            'expired' => 'মেয়াদ উত্তীর্ণ',
-                        ])
-                        
-                        ->placeholder('সকল অবস্থা')
-                        ->reactive(),
+
                     Select::make('year')
                         ->label('বছর')
                         ->options(function () {
@@ -91,33 +81,56 @@ class ApplicationReport extends Page implements HasTable, HasForms
 
     protected function getTableQuery()
     {
-        return \App\Models\Applicant::query()
-            ->when($this->area_id, fn ($query) => $query->where('area_id', $this->area_id))
-            ->when($this->category_id, fn ($query) => $query->where('category_id', $this->category_id))
-            ->when($this->application_status, fn ($query) => $query->where('status', $this->application_status))
-            ->when($this->year, fn ($query) => $query->whereYear('created_at', $this->year));
+        return Payment::query()
+            ->whereHas('applicant',function ($query) {
+                return $query->when($this->area_id, fn ($query) => $query->where('area_id', $this->area_id))
+                ->when($this->category_id, fn ($query) => $query->where('category_id', $this->category_id))
+                ->when($this->year, fn ($query) => $query->whereYear('created_at', $this->year));
+            });        
     }
 
     protected function getTableColumns(): array
     {
+        $numto = new NumberToBangla();
         return [
-            TextColumn::make('application_number')->label('আবেদন নং')
-                ->formatStateUsing(fn (string $state): string => Helper::en2bn($state))
-                ->sortable(),
-            TextColumn::make('applicant_name')->label('নাম')->sortable(),
-            TextColumn::make('area.area_name')->label('এলাকা')->sortable(),
-            TextColumn::make('category.category_name')->label('ক্যাটাগরি')->sortable(),
-            TextColumn::make('status')->label('অবস্থা')->sortable()
-                ->badge()
-                ->color(fn (string $state): string => match ($state) {
-                    'confirmed' => 'info',
-                    'pending' => 'warning',
-                    'approved' => 'success',
-                    'rejected' => 'danger',
-                }),
-            TextColumn::make('applicaton_date')->label('আবেদনের তারিখ')
-                ->formatStateUsing(fn (string $state): string => Helper::en2bn(date('d-m-Y', strtotime($state))))
-                ->sortable(),
+            TextColumn::make('applicant.application_number')
+                ->label(__('forms.application_number'))
+                ->formatStateUsing(fn($state)=>Helper::en2bn($state))
+                ->searchable(),
+            TextColumn::make('applicant.applicant_name')
+                ->label(__('forms.applicant_name'))
+                ->formatStateUsing(fn($state)=>Helper::en2bn($state))
+                ->searchable(),
+            TextColumn::make('fee')
+                ->label(__('forms.fee'))
+                ->formatStateUsing(fn($state)=>$numto->bnCommaLakh($state))
+                ->searchable()
+                ->suffix(' ৳'),
+            TextColumn::make('yearly_fee')
+                ->label(__('forms.yearly_fee'))
+                ->formatStateUsing(fn($state)=>$numto->bnCommaLakh($state))
+                ->searchable()
+                ->suffix(' ৳'),
+            TextColumn::make('yearly_fee_refund')
+                ->label(__('forms.yearly_fee_refund'))
+                ->formatStateUsing(fn($state)=>$numto->bnCommaLakh($state))
+                ->searchable()
+                ->suffix(' ৳'),
+            TextColumn::make('security_fee')
+                ->label(__('forms.security_fee'))
+                ->formatStateUsing(fn($state)=>$numto->bnCommaLakh($state))
+                ->searchable()
+                ->suffix(' ৳'),
+            TextColumn::make('security_fee_refund')
+                ->label(__('forms.security_fee_refund'))
+                ->formatStateUsing(fn($state)=>$numto->bnCommaLakh($state))
+                ->searchable()
+                ->suffix(' ৳'),
+            TextColumn::make('total_paid')
+                ->label(__('forms.total_paid'))
+                ->formatStateUsing(fn($state)=>$numto->bnCommaLakh($state))
+                ->searchable()
+                ->suffix(' ৳'),
         ];
     }
 
@@ -130,15 +143,14 @@ class ApplicationReport extends Page implements HasTable, HasForms
                 ->exports([
                     ExcelExport::make()
                         ->fromTable()
-                        ->withFilename('আবেদন রিপোর্ট_' . now()->format('Y-m-d'))
+                        ->withFilename('সামারি রিপোর্ট_' . now()->format('Y-m-d'))
                         ->withWriterType(\Maatwebsite\Excel\Excel::XLSX),          
                 ]),
             Action::make('print_report')
                 ->label('রিপোর্ট প্রিন্ট করুন')
-                ->url(fn () => route('application-report-print', [
+                ->url(fn () => route('summery-application-report-print', [
                     'area_id' => $this->area_id,
                     'category_id' => $this->category_id,
-                    'application_status' => $this->application_status,
                     'year' => $this->year,
                 ]))
                 ->openUrlInNewTab(),

@@ -22,3 +22,9 @@ Route::get('/print-receipt', [ReceiptController::class, 'PrintReceipt'])->name('
 Route::get('/application-report/print', [PrintReportController::class, 'PrintApplicationReport'])
     ->name('application-report-print');
 
+Route::get('/category-application-report/print', [PrintReportController::class, 'PrintCategoryApplicationReport'])
+    ->name('category-application-report-print');
+
+Route::get('/summery-application-report/print', [PrintReportController::class, 'PrintSummeryApplicationReport'])
+    ->name('summery-application-report-print');
+
