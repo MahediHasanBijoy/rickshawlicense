@@ -19,6 +19,7 @@ return new class extends Migration
             $table->float('security_fee', 8, 2);
             $table->float('security_fee_refund', 8, 2);
             $table->date('app_expire_date');
+            $table->integer('license_year');
             $table->timestamps();
         });
     }

@@ -21,7 +21,7 @@ use UnitEnum;
 class LotteryTokenPrint extends Page implements HasTable, HasForms
 {
     use InteractsWithTable, InteractsWithForms;
-    // use HasPageShield;
+     use HasPageShield;
     protected string $view = 'filament.pages.lottery-token-print';
     protected static ?string $navigationLabel = 'টোকেন প্রিন্ট';
 

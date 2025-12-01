@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->unique();
             $table->string('bank_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
-            $table->string('pay_order_no')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+            $table->string('pay_order_no')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->unique();
             $table->string('amount')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->default(0);
             $table->date('order_date');
             $table->date('applicaton_date')->nullable();

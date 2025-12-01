@@ -55,4 +55,5 @@ return [
     'is_security_refund'=>'সিকিউরিটি ফি ফেরত দিতে চান?',
     'security_refundable'=>'ফেরত যোগ্য সিকিউরিটি',
     'actor'=>'সম্পাদনকারী',
+    'license_year'=>'লাইসেন্সের বছর', 
 ];

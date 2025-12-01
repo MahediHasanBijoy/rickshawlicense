@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Applicants\Schemas;
 
 use App\Helpers\Helper;
+use App\Models\ApplicationSetting;
 use Dom\Text;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
@@ -17,6 +18,8 @@ use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
 use Carbon\Carbon;
+
+use function Symfony\Component\Clock\now;
 
 class ApplicantForm
 {
@@ -65,7 +68,7 @@ class ApplicantForm
                                         TextInput::make('nid_no')
                                             ->label(__('forms.nid_no'))
                                             ->unique(ignoreRecord: true, modifyRuleUsing: fn ($rule) =>
-                                                    $rule->where('applicant_year', now()->year)
+                                                    $rule->where('applicant_year', now()->format('Y'))
                                             )
                                             ->required()
                                             ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
@@ -77,7 +80,7 @@ class ApplicantForm
                                         TextInput::make('phone')
                                             ->label(__('forms.phone'))
                                             ->unique(ignoreRecord: true, modifyRuleUsing: fn ($rule) =>
-                                                $rule->where('applicant_year', now()->year)
+                                                $rule->where('applicant_year', now()->format('Y'))
                                             )
                                             ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
                                             ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
@@ -150,9 +153,24 @@ class ApplicantForm
                                         ->required(),
                                     TextInput::make('amount')
                                         ->label(__('forms.amount'))
-                                        ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
+                                        ->formatStateUsing(function(callable $get,callable $set,$state,$record){
+                                            if($record?->category->category_slug=='special'){
+                                                    $settings=ApplicationSetting::latest()->first();
+                                                    $today = Carbon::parse(Carbon::today()->toDateString());
+                                                    $lastDay = Carbon::parse(Carbon::now()->endOfYear()->toDateString());
+
+                                                    $remainingDays = $today->diffInDays($lastDay)+1;
+                                                    $yearly_fee=$settings->license_year > date('Y') ?
+                                                    $settings->yearly_fee : $remainingDays * $settings->daily_fee;
+                                                    
+                                                   return \App\Helpers\Helper::en2bn($yearly_fee);
+                                                    
+                                                }else{
+                                                    return \App\Helpers\Helper::en2bn($record->amount);
+                                                }
+                                            })
                                         ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
-                                        ->default(null)
+                                        ->default(0)
                                         ->required(),
                                     DatePicker::make('order_date')
                                         ->label(__('forms.order_date'))

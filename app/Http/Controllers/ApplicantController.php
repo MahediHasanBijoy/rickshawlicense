@@ -58,7 +58,7 @@ class ApplicantController extends Controller
                         ],
 
             'bank_name'         => 'required|string|max:255',
-            'pay_order_no'      => 'required|string|max:255',
+            'pay_order_no'      => 'required|string|max:255|unique:applicants,pay_order_no',
             'amount'            => 'required|numeric',
             'order_date'        => 'required|date',
 
@@ -111,6 +111,7 @@ class ApplicantController extends Controller
             'bank_name.max'      => 'ব্যাংকের নাম সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
 
             'pay_order_no.required' => 'পে অর্ডার নম্বর প্রদান করুন।',
+             'pay_order_no.unique' => 'এই অর্ডার নম্বর দিয়ে ইতোমধ্যে আবেদন করা হয়েছে।',
             'pay_order_no.string'   => 'পে অর্ডার নম্বর অবশ্যই সঠিক টেক্সট হতে হবে।',
             'pay_order_no.max'      => 'পে অর্ডার নম্বর সর্বোচ্চ ২৫৫ অক্ষর হতে পারে।',
 

@@ -37,6 +37,11 @@ class ApplicationSettingForm
                     ->label(__('forms.security_fee_refund'))
                     ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
                     ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state)),
+                TextInput::make('license_year')
+                    ->required()
+                    ->label(__('forms.license_year'))
+                    ->formatStateUsing(fn ($state) => \App\Helpers\Helper::en2bn($state))
+                    ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state)),
                 DatePicker::make('app_expire_date')
                     ->required()
                     ->label(__('forms.app_expire_date')),

@@ -371,10 +371,17 @@
         </div> --}}
 
         
-
+@php
+    $i=1;
+@endphp
         <!-- Section 2: Pay Order Information -->
-        <div class="section-title">০১. পে অর্ডারের বিবরন (Pay Order Information)</div>
-
+    @if ($applicant->payment->yearly_fee!=0)
+        
+   
+        <div class="section-title">০{{ bn_number($i) }} . পে অর্ডারের বিবরন (Pay Order Information)</div>
+        @php
+        $i+=1;
+    @endphp
         <table class="data-table">
             <thead>
                 <tr>
@@ -400,9 +407,11 @@
                 </tr>
             </tbody>
         </table>
-
-        <div class="section-title">০২. আবেদন ফি প্রদানের বিবরন (Application Fee Information)</div>
-
+ @endif
+        <div class="section-title">০{{ bn_number($i) }}. আবেদন ফি প্রদানের বিবরন (Application Fee Information)</div>
+        @php
+            $i+=1;
+        @endphp
         <table class="data-table">
             <thead>
                 <tr>
@@ -429,8 +438,10 @@
             </tbody>
         </table>
         @if ($applicant->payment->security_fee > 0)
-        <div class="section-title">০৩. সিকিউরিটি ফি প্রদানের বিবরন (Security Fee Information)</div>
-
+        <div class="section-title">{{ bn_number($i) }}. সিকিউরিটি ফি প্রদানের বিবরন (Security Fee Information)</div>
+        @php
+            $i+=1;
+        @endphp
         <table class="data-table">
             <thead>
                 <tr>
@@ -458,8 +469,10 @@
         </table>
         @endif
         @if($applicant->payment->is_yearly_fee_refund || $applicant->payment->is_security_refund)
-        <div class="section-title">০৪. জামানত ফেরতের  বিবরন (Refund Information)</div>
-
+        <div class="section-title">০{{ bn_number($i) }}. জামানত ফেরতের  বিবরন (Refund Information)</div>
+            @php
+            $i+=1;
+        @endphp
         <table class="data-table">
             <thead>
                 <tr>

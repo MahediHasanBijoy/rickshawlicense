@@ -14,7 +14,7 @@ class Payment extends Model
         static::creating(function ($payment) {
             if ($payment->fee_paid==='yes' && $payment->fee > 0) {
                 $settings=ApplicationSetting::latest()->first();
-                $applicant = Applicant::find($payment->applicant_id);
+                $applicant = Applicant::query()->where('id',$payment->applicant_id)->first();
                 $prefix = 'INV-' . now()->format('Y') . '-';
                 $lastpayment = self::where('invoice_no', 'like', $prefix . '%')->orderByDesc('invoice_no')->first();
                 $number = $lastpayment
@@ -22,7 +22,7 @@ class Payment extends Model
                     : 1;
                 $payment->invoice_no  = $prefix . str_pad($number, 4, '0', STR_PAD_LEFT);
                 $payment->fee_date = now()->format('Y-m-d');
-                $payment->yearly_fee = $applicant->amount ?? 0;
+                $payment->yearly_fee =$applicant->category->category_slug=='special' ? 0 : $applicant->amount;
                 $payment->security_payable = $settings->security_fee ?? 0;
                 $payment->security_refundable = $settings->security_fee_refund ?? 0;
                 $payment->yearly_fee_date = $applicant->order_date;
@@ -37,8 +37,9 @@ class Payment extends Model
 
         static::created(function($payment){
             $applicant = Applicant::find($payment->applicant_id);
+            $category = Category::find($applicant->category_id);
             if ($applicant &&  $applicant->status == 'pending' && $payment->fee_paid =='paid') {
-                $applicant->status = 'confirmed';
+                $applicant->status = $category->category_slug=='special' ? 'selected' : 'confirmed';
                 $applicant->confirm_date = now()->format('Y-m-d');
                 $applicant->confirmed_by  = auth()->id();
                 $applicant->save();
@@ -50,7 +51,8 @@ class Payment extends Model
 
         static::updated(function ($payment) {
             $payment->updated_by = auth()->id();
-            $applicant = Applicant::find($payment->applicant_id);
+            $applicant = Applicant::query()->where('id',$payment->applicant_id)->first();
+            $category = $applicant->category;
             if ($applicant &&  $applicant->status == 'pending' && $payment->fee_paid ==='yes') {
                 $applicant->status = 'confirmed';
                 $applicant->confirm_date = now()->format('Y-m-d');
@@ -86,8 +88,10 @@ class Payment extends Model
                 $payment->security_fee = $payment->security_payable;
                 $payment->security_paid='paid';
 
+                $yearly_fee=$category->category_slug=='special' ? $applicant->amount : $payment->getOriginal('yearly_fee');
                 $payment->total_paid=($payment->security_paid=='paid'  ? $payment->security_fee : 0) + 
-                $payment->getOriginal('fee') + $payment->getOriginal('yearly_fee');
+                $payment->getOriginal('fee') + $yearly_fee;
+                $payment->yearly_fee=$category->category_slug=='special' ? $applicant->amount : $payment->getOriginal('yearly_fee');
 
                 $payment->saveQuietly();
                  $applicant->status = 'approved';
@@ -101,7 +105,9 @@ class Payment extends Model
                 $payment->security_paid='no';
 
                 $payment->total_paid=($payment->security_paid=='paid'  ? $payment->security_fee : 0) + 
-                $payment->getOriginal('fee') + $payment->getOriginal('yearly_fee');
+                $payment->getOriginal('fee') + 
+                ($category->category_slug=='special' ? 0 : $payment->getOriginal('yearly_fee'));
+                $payment->yearly_fee=$category->category_slug=='special' ? 0 : $payment->getOriginal('yearly_fee');
 
                 $payment->saveQuietly();
                 $applicant->status = 'selected';
