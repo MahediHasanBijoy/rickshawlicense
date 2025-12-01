@@ -98,5 +98,17 @@ class PrintReportController extends Controller
 
     }
 
+    public function PrintLotteryToken(Request $request){
+        $category_id = $request->query('category_id');
+        $year = $request->query('year'); 
+        $applicants = Applicant::query()
+            ->when($category_id, fn ($query) => $query->where('category_id', $category_id))
+            ->when($year, fn ($query) => $query->whereYear('applicant_year', $year))
+            ->where('status', 'confirmed')
+            ->get();
+        $category = \App\Models\Category::find($category_id)?->category_name;
+        return view('receipt.tokens_print', compact('applicants', 'category', 'year'));
+    }
+
     
 }

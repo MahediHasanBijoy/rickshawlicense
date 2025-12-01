@@ -38,196 +38,39 @@
         }
     </style>
 </head>
+@php
+    use App\Helpers\Helper;
+@endphp
 <body>
-    <div class="container-fluid p-4 page-size">
+    <div class="text-center mb-4">
+        <img src="{{ asset('images/logo.png') }}" alt="" srcset="">
+        <h4>ঢাকা ক্যান্টনমেন্ট বোর্ড</h4>
+        <h6> লটারি টোকেন প্রিন্ট</h6>
+        
+        <h6 class="text-decoration-underline">বছরঃ {{  Helper::en2bn($year) . 'ইং'}}</h6>
+        
+        
+            <h6 class="text-decoration-underline">ক্যাটাগরিঃ {{ $category ?? 'সকল ক্যাটাগরি' }}</h6>
+        
+
+    </div>
         <div class="row row-cols-3 g-3">
             <!-- loop starts here -->
+            @foreach ($applicants as $applicant)
+
             <div class="col">
                 <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0001</div>
+                    <div class="token-number text-center">
+                        <p style="margin-bottom:0px;">{{ Helper::en2bn($applicant->application_number) }}</p>
+                        <p style="margin-bottom:0px;letter-spacing: 0px;font-size:13px;font-weight:500;word-break: normal;overflow-wrap: anywhere;
+    white-space: normal;">{{ $applicant->applicant_name }}</p>
+                    </div>
+
                 </div>
             </div>
             <!-- loop ends here. remove rest blocks below. -->
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0002</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0003</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="token-box d-flex align-items-center justify-content-center p-3">
-                    <div class="token-number">2025-0004</div>
-                </div>
-            </div>
+            @endforeach
+
         </div>
     </div>
     <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>

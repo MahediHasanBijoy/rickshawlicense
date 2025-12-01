@@ -28,6 +28,9 @@ Route::get('/category-application-report/print', [PrintReportController::class, 
 Route::get('/summery-application-report/print', [PrintReportController::class, 'PrintSummeryApplicationReport'])
     ->name('summery-application-report-print');
 
+Route::get('/lottery-token/print', [PrintReportController::class, 'PrintLotteryToken'])
+    ->name('lottery-token-print');
+
 Route::get('/tokens', function(){
     return view('receipt.tokens_print');
 });

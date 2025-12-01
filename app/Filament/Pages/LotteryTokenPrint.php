@@ -18,33 +18,25 @@ use pxlrbt\FilamentExcel\Actions\ExportAction;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use UnitEnum;
 
-use function Symfony\Component\Clock\now;
-
-class ApplicationReport extends Page implements HasTable, HasForms
+class LotteryTokenPrint extends Page implements HasTable, HasForms
 {
     use InteractsWithTable, InteractsWithForms;
-    use HasPageShield;
-    protected string $view = 'filament.pages.application-report';
+    // use HasPageShield;
+    protected string $view = 'filament.pages.lottery-token-print';
+    protected static ?string $navigationLabel = 'টোকেন প্রিন্ট';
 
-    protected static ?string $navigationLabel = 'আবেদন রিপোর্ট';
-
-    protected static string | UnitEnum | null $navigationGroup = 'রিপোর্ট সমূহ';
+    protected static string | UnitEnum | null $navigationGroup = 'টোকেন প্রিন্ট';
     
-    protected static string|\BackedEnum|null $navigationIcon = Heroicon::ClipboardDocumentList;
+    protected static string|\BackedEnum|null $navigationIcon = Heroicon::CommandLine;
 
-    public ?int $area_id = null;
     public ?int $category_id = null;
-    public ?string $application_status = null;
     public ?string $year = null;
 
-
-    
     public function getTitle(): string
     {
-        return 'আবেদন রিপোর্ট';
+        return 'লটারি টোকেন';
     }
 
-    
     public function mount()
     {
         $this->year = now()->format('Y');
@@ -56,26 +48,15 @@ class ApplicationReport extends Page implements HasTable, HasForms
 
             Grid::make(4)
                 ->schema([
-                    Select::make('area_id')
-                        ->label('এলাকা')
-                        ->options(\App\Models\Area::all()->pluck('area_name', 'id')->toArray())
-                        ->placeholder('সকল এলাকা')
-                        ->reactive(),
+                    // Select::make('area_id')
+                    //     ->label('এলাকা')
+                    //     ->options(\App\Models\Area::all()->pluck('area_name', 'id')->toArray())
+                    //     ->placeholder('সকল এলাকা')
+                    //     ->reactive(),
                     Select::make('category_id')
                         ->label('ক্যাটাগরি')
                         ->options(\App\Models\Category::all()->pluck('category_name', 'id')->toArray())
                         ->placeholder('সকল ক্যাটাগরি')
-                        ->reactive(),
-                    Select::make('application_status')
-                        ->label('আবেদনের অবস্থা')
-                        ->options([
-                            'pending' => 'বিচারাধীন',
-                            'confirmed' => 'গ্রহনকৃত',
-                            'approved' => 'অনুমোদিত',
-                            'expired' => 'মেয়াদ উত্তীর্ণ',
-                        ])
-                        
-                        ->placeholder('সকল অবস্থা')
                         ->reactive(),
                     Select::make('year')
                         ->label('বছর')
@@ -97,10 +78,9 @@ class ApplicationReport extends Page implements HasTable, HasForms
     protected function getTableQuery()
     {
         return \App\Models\Applicant::query()
-            ->when($this->area_id, fn ($query) => $query->where('area_id', $this->area_id))
             ->when($this->category_id, fn ($query) => $query->where('category_id', $this->category_id))
-            ->when($this->application_status, fn ($query) => $query->where('status', $this->application_status))
-            ->when($this->year, fn ($query) => $query->whereYear('created_at', $this->year));
+            ->when($this->year, fn ($query) => $query->whereYear('created_at', $this->year))
+            ->where('status','confirmed');
     }
 
     protected function getTableColumns(): array
@@ -135,15 +115,13 @@ class ApplicationReport extends Page implements HasTable, HasForms
                 ->exports([
                     ExcelExport::make()
                         ->fromTable()
-                        ->withFilename('আবেদন রিপোর্ট_' . now()->format('Y-m-d'))
+                        ->withFilename('টোকেন প্রিন্ট_' . now()->format('Y-m-d'))
                         ->withWriterType(\Maatwebsite\Excel\Excel::XLSX),          
                 ]),
             Action::make('print_report')
-                ->label('রিপোর্ট প্রিন্ট করুন')
-                ->url(fn () => route('application-report-print', [
-                    'area_id' => $this->area_id,
+                ->label('টোকেন প্রিন্ট করুন')
+                ->url(fn () => route('lottery-token-print', [
                     'category_id' => $this->category_id,
-                    'application_status' => $this->application_status,
                     'year' => $this->year,
                 ]))
                 ->openUrlInNewTab(),
