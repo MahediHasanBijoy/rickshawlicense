@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Applicants\Schemas;
 
 use App\Helpers\Helper;
 use App\Models\ApplicationSetting;
+use App\Models\Category;
 use Dom\Text;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
@@ -40,7 +41,26 @@ class ApplicantForm
                                 Select::make('category_id')
                                     ->label(__('forms.category_name'))
                                     ->relationship('category', 'category_name')
-                                    ->required(),
+                                    ->required()
+                                    ->reactive()
+                                    ->afterStateUpdated(function(callable $set,$state){
+                                        $category=Category::find($state);
+                                        $settings=ApplicationSetting::latest()->first();
+                                        if($category->category_slug=='special'){
+                                            $today = Carbon::parse(Carbon::today()->toDateString());
+                                            $lastDay = Carbon::parse(Carbon::now()->endOfYear()->toDateString());
+
+                                            $remainingDays = $today->diffInDays($lastDay)+1;
+                                            $yearly_fee=$settings->license_year > date('Y') ?
+                                            $settings->yearly_fee : $remainingDays * $settings->daily_fee;
+                                            
+                                            $set('amount',Helper::en2bn($yearly_fee));
+                                            
+                                        }else{
+                                            $set('amount',Helper::en2bn($settings->yearly_fee));
+                                        }
+                                    })
+                                    ->disabled(fn($record)=>$record?->status=='approved' || $record?->status=='rejected'),
 
                             ])
                             ->columns(2)
@@ -137,11 +157,11 @@ class ApplicantForm
                             ->columnSpanFull(),
 
                         ]),
-                    Step::make('পে অর্ডারের বিবরন')
+                    Step::make('পে অর্ডারের বিবরণ')
                         ->id('payment')
                         ->schema([
                 
-                            Section::make('পে অর্ডারের বিবরন')
+                            Section::make('পে অর্ডারের বিবরণ')
                                 ->schema([
                                     TextInput::make('bank_name')
                                         ->label(__('forms.bank_name'))
@@ -154,7 +174,7 @@ class ApplicantForm
                                     TextInput::make('amount')
                                         ->label(__('forms.amount'))
                                         ->formatStateUsing(function(callable $get,callable $set,$state,$record){
-                                            if($record?->category->category_slug=='special'){
+                                            if($record?->category->category_slug=='special' && $record?->status !='approved'){
                                                     $settings=ApplicationSetting::latest()->first();
                                                     $today = Carbon::parse(Carbon::today()->toDateString());
                                                     $lastDay = Carbon::parse(Carbon::now()->endOfYear()->toDateString());
@@ -166,12 +186,13 @@ class ApplicantForm
                                                    return \App\Helpers\Helper::en2bn($yearly_fee);
                                                     
                                                 }else{
-                                                    return \App\Helpers\Helper::en2bn($record->amount);
+                                                    return \App\Helpers\Helper::en2bn($record?->amount);
                                                 }
                                             })
                                         ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
                                         ->default(0)
-                                        ->required(),
+                                        ->required()
+                                        ->disabled(fn($record)=>$record?->status=='approved' || $record?->status=='rejected'),
                                     DatePicker::make('order_date')
                                         ->label(__('forms.order_date'))
                                         ->required(),
@@ -318,7 +339,7 @@ class ApplicantForm
                                         
                                     ])
                                     ->columns(2),
-                                    Section::make('পূর্বের কার্যক্রমের সংক্ষিপ্ত বিবরন')
+                                    Section::make('পূর্বের কার্যক্রমের সংক্ষিপ্ত বিবরণ')
                                         ->relationship('payment')
                                         ->schema([
                                             Grid::make(3)

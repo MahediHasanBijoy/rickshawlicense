@@ -127,7 +127,7 @@
                         </div>
                         <div class="mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
-                                এন আইডি নং <span class="text-danger">*</span>
+                                এন আইডি/জন্মনিবন্ধন নং <span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
                                 <input type="text" name="nid_no" class="form-control form-control-lg @error('nid_no') is-invalid @enderror" placeholder="" value="{{ old('nid_no',$applicant->nid_no) }}">
@@ -161,7 +161,7 @@
                         </div>
                     </div>
                     <div class="border p-4 rounded shadow-sm mb-2">
-                        <h5 class="fw-bold mb-4">পে অর্ডারের বিবরন (Pay Order Information)</h5>
+                        <h5 class="fw-bold mb-4">পে অর্ডারের বিবরণ (Pay Order Information)</h5>
                         <div class="mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
                                 ব্যাংকের নাম<span class="text-danger">*</span>
@@ -278,7 +278,7 @@
 
                         <div class=" mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
-                                নাগরিক সনদ
+                                নাগরিক সনদ<span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
                                 <input type="file" name="citizen_certificate_image" class="form-control form-control-lg @error('citizen_certificate_image') is-invalid @enderror" placeholder="" id="citizen_certificate_image">
@@ -335,7 +335,7 @@
 
                         <div class=" mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
-                                ক্যাটাগরি প্রমানক
+                                ক্যাটাগরি প্রমানক<span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
                                 <input type="file" name="category_proof_image" class="form-control form-control-lg @error('category_proof_image') is-invalid @enderror" placeholder="" id="category_proof_image">

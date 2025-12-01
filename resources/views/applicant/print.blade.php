@@ -330,7 +330,7 @@
         </div>
 
         <div class="info-row">
-            <span class="info-label">এন আইডি নং:</span>
+            <span class="info-label">এন আইডি/জন্মনিবন্ধন নং:</span>
             <span class="info-value">
                 {{ $applicant->nid_no ? bn_number($applicant->nid_no): '' }} 
             </span>
@@ -351,7 +351,7 @@
         </div>
 
         <!-- Section 2: Pay Order Information -->
-        <div class="section-title">০২. পে অর্ডারের বিবরন (Pay Order Information)</div>
+        <div class="section-title">০২. পে অর্ডারের বিবরণ (Pay Order Information)</div>
 
         <table class="data-table">
             <thead>

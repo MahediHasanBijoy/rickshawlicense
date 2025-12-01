@@ -20,7 +20,7 @@ class ApplicantController extends Controller
     public function create()
     {
         $areas = Area::select('id', 'area_name')->get();
-        $categories = Category::select('id', 'category_name')->get();
+        $categories = Category::where('category_slug','N/A')->select('id', 'category_name')->get();
         $app_setting = ApplicationSetting::latest()->first();
         return view('applicant.apply', compact('areas', 'categories','app_setting'));
     }
@@ -31,6 +31,7 @@ class ApplicantController extends Controller
             'amount' => Helper::bn2en($request->amount),
             'nid_no' => Helper::bn2en($request->nid_no),
             'phone'  => Helper::bn2en($request->phone),
+            'pay_order_no'=> Helper::bn2en($request->pay_order_no),
         ]);
         $validated = $request->validate([
             'area_id'           => 'required|exists:areas,id',
@@ -65,8 +66,8 @@ class ApplicantController extends Controller
             // File validation
             'applicant_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             // 'signature_image'   => 'nullable|image|max:2048',
-            'citizen_certificate_image'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'category_proof_image'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'citizen_certificate_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'category_proof_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'nid_image'         => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'py_order_image'    => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ],[
@@ -374,7 +375,7 @@ class ApplicantController extends Controller
             'applicant_image' => 'applicant',
             'signature_image' => 'signature',
             'nid_image'       => 'nid',
-            'py_order_image'  => 'order',
+            'py_order_image'  => 'pay_order',
             'citizen_certificate_image' => 'citizen_certificate',
             'category_proof_image' => 'category_proof',
         ] as $field => $folder) {

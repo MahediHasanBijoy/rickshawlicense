@@ -44,7 +44,7 @@
         <ul style="padding-left:1.25rem;line-height:1.5;margin-bottom:12px; color:red;">
             <li>একজন ব্যক্তি একের অধিক কোটায় আবেদন করতে পারবেন না। আবেদনকারী মনোনীত হলে ১টি লাইসেন্স ইজারা/বরাদ্দ পাবেন।</li>
             <li>আবেদনের সাথে সিইও, ঢাকা ক্যান্টনমেন্ট এর অনুকূলে লাইসেন্স ফি বাবদ ৭৩০০/- (সাত হাজার তিনশত) টাকার পে-অর্ডারের কপিসহ তথ্য প্রদান করতে হবে। আবেদনকারী মনোনীত হলে পে-অর্ডার জমা প্রদান করতে হবে।</li>
-            <li>রিক্সার লাইসেন্সের জন্য অনুমতিপ্রাপ্ত হলে লাইসেন্স ফি এর উপর 15% ভ্যাট ও 10% উৎসকর প্রদান করতে হবে। এছাড়া প্রতিটি লাইসেন্সের জন্য ৩০০০/- (তিন হাজার) টাকা জমা রাখতে হবে। এর মধ্যে জামানত বাবদ ২০০০/- টাকা লাইসেন্সের মেয়াদ শেষে ফেরতযোগ্য। অবশিষ্ট ১০০০/- টাকা রিক্সা মনিটরিং ফি বাবদ কর্তন করা হবে।</li>
+            <li>রিক্সার লাইসেন্সের জন্য অনুমতিপ্রাপ্ত হলে লাইসেন্স ফি এর উপর ১৫% ভ্যাট ও ১০% উৎসকর প্রদান করতে হবে। এছাড়া প্রতিটি লাইসেন্সের জন্য ৩০০০/- (তিন হাজার) টাকা জমা রাখতে হবে। এর মধ্যে জামানত বাবদ ২০০০/- টাকা লাইসেন্সের মেয়াদ শেষে ফেরতযোগ্য। অবশিষ্ট ১০০০/- টাকা রিক্সা মনিটরিং ফি বাবদ কর্তন করা হবে।</li>
             <li>রিক্সার লাইসেন্স বিক্রয় করা যাবে না, তবে ভাড়া প্রদান করতে পারবেন। কোনো অনিয়ম পরিলক্ষিত হলে জামানত বাজেয়াপ্ত ও প্রয়োজনীয় আইনানুগ ব্যবস্থা গ্রহণ করা হবে।</li>
             <li>আবেদনকারী ঢাকা সিটিকর্পোরেশন বা ঢাকা ক্যান্টনমেন্ট বোর্ডের আওতাধীন এলাকায় বসবাসকারী হতে হবে। প্রমানক হিসেবে সংশ্লিষ্ট এলাকার নাগরিক সনদপত্র দাখিল করতে হবে।</li>
             <li>সকল কোটার আবেদনের ক্ষেত্রে কোটার প্রমানক সংযুক্ত করতে হবে।</li>
@@ -189,7 +189,7 @@
                         </div>
                         <div class="mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
-                                এন আইডি নং <span class="text-danger">*</span>
+                                এন আইডি/জন্মনিবন্ধন নং <span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
                                 <input type="text" name="nid_no" class="form-control form-control-lg @error('nid_no') is-invalid @enderror" placeholder="" value="{{ old('nid_no') }}">
@@ -223,7 +223,7 @@
                         </div>
                     </div>
                     <div class="border p-4 rounded shadow-sm mb-2">
-                        <h5 class="fw-bold mb-4">পে অর্ডারের বিবরন (Pay Order Information)</h5>
+                        <h5 class="fw-bold mb-4">পে অর্ডারের বিবরণ (Pay Order Information)</h5>
                         <div class="mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
                                 ব্যাংকের নাম<span class="text-danger">*</span>
@@ -310,7 +310,7 @@
 
                         <div class=" mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
-                                নাগরিক সনদ
+                                নাগরিক সনদ<span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
                                 <input type="file" name="citizen_certificate_image" class="form-control form-control-lg @error('citizen_certificate_image') is-invalid @enderror" placeholder="" id="citizen_certificate_image">
@@ -328,7 +328,7 @@
 
                         <div class=" mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
-                                ক্যাটাগরি প্রমানক
+                                ক্যাটাগরি প্রমানক<span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
                                 <input type="file" name="category_proof_image" class="form-control form-control-lg @error('category_proof_image') is-invalid @enderror" placeholder="" id="category_proof_image">
