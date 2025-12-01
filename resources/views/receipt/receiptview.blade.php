@@ -21,12 +21,40 @@
         }
 
         .print-container {
+            position: relative; /* for watermark */
             width: 210mm;
             min-height: 297mm;
             margin: 0 auto;
             padding: 15mm;
             background: white;
             position: relative;
+        }
+        /* for watermark */
+        .print-container::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%; /* Adjust size as needed */
+            height: 50%; /* Adjust size as needed */
+            background-image: url('{{ asset("images/rickshaw.png") }}');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.1; /* Adjust transparency (0.1 = 10% visible) */
+            z-index: 0;
+            pointer-events: none;
+        }
+        .print-container > * {
+            position: relative;
+            z-index: 1;
+        }
+        @media print {
+            .print-container::before {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
 
         .header-info {
