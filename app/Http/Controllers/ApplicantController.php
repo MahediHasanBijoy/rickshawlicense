@@ -64,12 +64,12 @@ class ApplicantController extends Controller
             'order_date'        => 'required|date',
 
             // File validation
-            'applicant_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'applicant_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
             // 'signature_image'   => 'nullable|image|max:2048',
-            'citizen_certificate_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'category_proof_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'nid_image'         => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'py_order_image'    => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'citizen_certificate_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'category_proof_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'nid_image'         => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'py_order_image'    => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
         ],[
             // Custom messages
             // Area & Category
@@ -145,27 +145,34 @@ class ApplicantController extends Controller
 
         
         if ($request->hasFile('applicant_image')) {
-            $validated['applicant_image'] = $request->file('applicant_image')->store('applicant', 'public');
+            // $validated['applicant_image'] = $request->file('applicant_image')->store('applicant', 'public');
+            $validated['applicant_image'] = Helper::compress($request->file('applicant_image'), 'applicant', 50);
         }
 
         if ($request->hasFile('signature_image')) {
-            $validated['signature_image'] = $request->file('signature_image')->store('signature', 'public');
+            // $validated['signature_image'] = $request->file('signature_image')->store('signature', 'public');
+            $validated['signature_image'] = Helper::compress($request->file('signature_image'), 'signature', 50);
+
         }
 
         if ($request->hasFile('nid_image')) {
-            $validated['nid_image'] = $request->file('nid_image')->store('nid', 'public');
+            // $validated['nid_image'] = $request->file('nid_image')->store('nid', 'public');
+            $validated['nid_image'] = Helper::compress($request->file('nid_image'), 'nid', 50);
         }
 
         if ($request->hasFile('py_order_image')) {
-            $validated['py_order_image'] = $request->file('py_order_image')->store('pay_order', 'public');
+            // $validated['py_order_image'] = $request->file('py_order_image')->store('pay_order', 'public');
+            $validated['py_order_image'] = Helper::compress($request->file('py_order_image'), 'pay_order', 50);
         }
 
         if ($request->hasFile('citizen_certificate_image')) {
-            $validated['citizen_certificate_image'] = $request->file('citizen_certificate_image')->store('citizen_certificate', 'public');
+            // $validated['citizen_certificate_image'] = $request->file('citizen_certificate_image')->store('citizen_certificate', 'public');
+            $validated['citizen_certificate_image'] = Helper::compress($request->file('citizen_certificate_image'), 'citizen_certificate', 50);
         }
 
         if ($request->hasFile('category_proof_image')) {
-            $validated['category_proof_image'] = $request->file('category_proof_image')->store('category_proof', 'public');
+            // $validated['category_proof_image'] = $request->file('category_proof_image')->store('category_proof', 'public');
+            $validated['category_proof_image'] = Helper::compress($request->file('category_proof_image'), 'category_proof', 50);
         }
 
         $applicant = Applicant::create($validated);
@@ -292,12 +299,12 @@ class ApplicantController extends Controller
             'order_date'   => 'required|date',
 
             // Images → optional during update
-            'applicant_image'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            // 'signature_image'          => 'nullable|image|max:2048',
-            'citizen_certificate_image'=> 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'category_proof_image'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'nid_image'                => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'py_order_image'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'applicant_image'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            // 'signature_image'          => 'nullable|image|max:10240',
+            'citizen_certificate_image'=> 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'category_proof_image'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'nid_image'                => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'py_order_image'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
         ],[
             // Custom messages
             // Area & Category
@@ -387,7 +394,8 @@ class ApplicantController extends Controller
                     \Storage::disk('public')->delete($applicant->$field);
                 }
 
-                $validated[$field] = $request->file($field)->store($folder, 'public');
+                // $validated[$field] = $request->file($field)->store($folder, 'public');
+                $validated[$field] = Helper::compress($request->file($field), $folder, 50);
             }
         }
         

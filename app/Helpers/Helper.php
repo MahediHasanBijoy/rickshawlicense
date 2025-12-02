@@ -27,5 +27,28 @@ class Helper
 
         return str_replace($en, $bn, $number);
     }
+
+    public static function compress($file, $path, $quality = 70)
+    {
+        $extension = strtolower($file->getClientOriginalExtension());
+
+        $filename = time() . '_' . uniqid() . '.jpg';
+        $fullPath = storage_path('app/public/' . $path . '/' . $filename);
+
+        if ($extension === 'jpg' || $extension === 'jpeg') {
+            $image = imagecreatefromjpeg($file);
+        } elseif ($extension === 'png') {
+            $image = imagecreatefrompng($file);
+            imagepalettetotruecolor($image);
+        } else {
+            // PDF or unsupported → store original
+            return $file->store($path, 'public');
+        }
+
+        imagejpeg($image, $fullPath, $quality);
+        imagedestroy($image);
+
+        return $path . '/' . $filename;
+    }
 }
 
