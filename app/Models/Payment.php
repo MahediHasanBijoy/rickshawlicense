@@ -66,7 +66,7 @@ class Payment extends Model
                 $payment->payment_date = now()->format('Y-m-d');
                 $payment->saveQuietly();
             }
-            if ($applicant &&  ($applicant->status == 'confirmed' || $applicant->status == 'selected') && $payment->fee_paid ==='no') {
+            if ($applicant &&  ($applicant->status == 'confirmed' || $applicant->status == 'selected' || $applicant->status == 'unselected') && $payment->fee_paid ==='no') {
                 $applicant->status = 'pending';
                 $applicant->confirm_date = null;
                 $applicant->confirmed_by  = null;
