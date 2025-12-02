@@ -38,7 +38,7 @@ return new class extends Migration
             $table->string('py_order_image');
             $table->foreignId('confirmed_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->enum('status', ['pending', 'confirmed','selected','approved', 'expired','rejected'])->default('pending');
+            $table->enum('status', ['pending', 'confirmed','selected','approved', 'expired','rejected','unselected'])->default('pending');
             $table->timestamps();
         });
     }

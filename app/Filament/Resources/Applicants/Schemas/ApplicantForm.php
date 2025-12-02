@@ -19,6 +19,7 @@ use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
 use Carbon\Carbon;
+use Filament\Forms\Components\RichEditor;
 
 use function Symfony\Component\Clock\now;
 
@@ -29,44 +30,44 @@ class ApplicantForm
         return $schema
             ->components([
                 Wizard::make([
-                    Step::make('রুট ও ক্যাটাগরি নির্বাচন')
-                        ->id('selection')
-                        ->schema([
-                            Section::make('রুট ও ক্যাটাগরি নির্বাচন')
+                        Step::make('রুট ও ক্যাটাগরি নির্বাচন')
+                            ->id('selection')
                             ->schema([
-                                Select::make('area_id')
-                                    ->label(__('forms.area_name'))
-                                    ->relationship('area', 'area_name')
-                                    ->required(),
-                                Select::make('category_id')
-                                    ->label(__('forms.category_name'))
-                                    ->relationship('category', 'category_name')
-                                    ->required()
-                                    ->reactive()
-                                    ->afterStateUpdated(function(callable $set,$state){
-                                        $category=Category::find($state);
-                                        $settings=ApplicationSetting::latest()->first();
-                                        if($category->category_slug=='special'){
-                                            $today = Carbon::parse(Carbon::today()->toDateString());
-                                            $lastDay = Carbon::parse(Carbon::now()->endOfYear()->toDateString());
+                                Section::make('রুট ও ক্যাটাগরি নির্বাচন')
+                                ->schema([
+                                    Select::make('area_id')
+                                        ->label(__('forms.area_name'))
+                                        ->relationship('area', 'area_name')
+                                        ->required(),
+                                    Select::make('category_id')
+                                        ->label(__('forms.category_name'))
+                                        ->relationship('category', 'category_name')
+                                        ->required()
+                                        ->reactive()
+                                        ->afterStateUpdated(function(callable $set,$state){
+                                            $category=Category::find($state);
+                                            $settings=ApplicationSetting::latest()->first();
+                                            if($category->category_slug=='special'){
+                                                $today = Carbon::parse(Carbon::today()->toDateString());
+                                                $lastDay = Carbon::parse(Carbon::now()->endOfYear()->toDateString());
 
-                                            $remainingDays = $today->diffInDays($lastDay)+1;
-                                            $yearly_fee=$settings->license_year > date('Y') ?
-                                            $settings->yearly_fee : $remainingDays * $settings->daily_fee;
-                                            
-                                            $set('amount',Helper::en2bn($yearly_fee));
-                                            
-                                        }else{
-                                            $set('amount',Helper::en2bn($settings->yearly_fee));
-                                        }
-                                    })
-                                    ->disabled(fn($record)=>$record?->status=='approved' || $record?->status=='rejected'),
+                                                $remainingDays = $today->diffInDays($lastDay)+1;
+                                                $yearly_fee=$settings->license_year > date('Y') ?
+                                                $settings->yearly_fee : $remainingDays * $settings->daily_fee;
+                                                
+                                                $set('amount',Helper::en2bn($yearly_fee));
+                                                
+                                            }else{
+                                                $set('amount',Helper::en2bn($settings->yearly_fee));
+                                            }
+                                        })
+                                        ->disabled(fn($record)=>$record?->status=='approved' || $record?->status=='unselected'),
 
-                            ])
-                            ->columns(2)
-                            ->columnSpanFull(),
-                        ]),
-                    Step::make('ব্যক্তিগত তথ্য')
+                                ])
+                                ->columns(2)
+                                ->columnSpanFull(),
+                            ]),
+                        Step::make('ব্যক্তিগত তথ্য')
                         ->id('personal')
                         ->schema([
                             Section::make('ব্যক্তিগত তথ্য')
@@ -112,8 +113,8 @@ class ApplicantForm
                             ])
                             ->columns(2)
                             ->columnSpanFull(),
-                        Section::make('প্রয়োজনীয় ডকুমেন্ট সংযুক্তকরণ')
-                            ->schema([
+                            Section::make('প্রয়োজনীয় ডকুমেন্ট সংযুক্তকরণ')
+                                ->schema([
                                 
                                 FileUpload::make('applicant_image')
                                         ->label(__('forms.applicant_image'))
@@ -157,7 +158,7 @@ class ApplicantForm
                             ->columnSpanFull(),
 
                         ]),
-                    Step::make('পে অর্ডারের বিবরণ')
+                        Step::make('পে অর্ডারের বিবরণ')
                         ->id('payment')
                         ->schema([
                 
@@ -192,7 +193,7 @@ class ApplicantForm
                                         ->dehydrateStateUsing(fn ($state) => \App\Helpers\Helper::bn2en($state))
                                         ->default(0)
                                         ->required()
-                                        ->disabled(fn($record)=>$record?->status=='approved' || $record?->status=='rejected'),
+                                        ->disabled(fn($record)=>$record?->status=='approved' || $record?->status=='unselected'),
                                     DatePicker::make('order_date')
                                         ->label(__('forms.order_date'))
                                         ->required(),
@@ -215,8 +216,9 @@ class ApplicantForm
                                 ])
                                 ->columns(2)
                                 ->columnSpanFull(),
-                    ]),
+                        ]),
                         Step::make('সিদ্ধান্ত')
+                            ->id('decision')
                             ->visible(fn ($livewire) => ! ($livewire instanceof \Filament\Resources\Pages\CreateRecord))
                             ->schema([
                                 Section::make('সিদ্ধান্ত')
@@ -257,9 +259,10 @@ class ApplicantForm
                                                     ->dehydrated(true),
                                                    
                                             ])
-                                            ->disabled(fn($record)=>$record?->security_paid=='paid' && auth()->user()->hasRole('super_admin')
-                                                    ||($record?->fee_paid=='paid' && auth()->user()->hasRole('admin')) ||$record?->is_yearly_fee_refund==true)
-                                            //  ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'pending'
+                                            ->disabled(fn($record,$livewire)=>$record?->security_paid=='paid' && auth()->user()->hasRole('super_admin')
+                                                    ||($record?->fee_paid=='paid' && auth()->user()->hasRole('admin')) ||$record?->is_yearly_fee_refund==true
+                                                    || $livewire->getRecord()?->status === 'rejected')
+                                            //  ->hidden(fn ($livewire) => $livewire->getRecord()?->status === 'rejected')
                                             //         || ($livewire->getRecord()?->status !== 'pending' && auth()->user()->hasRole('super_admin')))
                                             ->columnSpanFull(),
                                         Grid::make(2)
@@ -307,7 +310,7 @@ class ApplicantForm
                                                     ])
                                                     ->required()
                                                     ->default(0),
-                                                    // ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'rejected'
+                                                    // ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'unselected'
                                                     // || ($livewire->getRecord()?->status === 'refunded' && auth()->user()->hasRole('super_admin'))),
                                                 TextInput::make('security_refundable')
                                                         ->label(__('forms.security_refundable'))
@@ -333,10 +336,9 @@ class ApplicantForm
                                                     ->disabled()
                                                     ->dehydrated(true),
                                             ])
-                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'rejected')
+                                            ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'unselected')
                                             ->disabled(fn($record)=>$record?->is_yearly_fee_refund==true && auth()->user()->hasRole('admin'))
                                             ->columnSpanFull(),
-                                        
                                     ])
                                     ->columns(2),
                                     Section::make('পূর্বের কার্যক্রমের সংক্ষিপ্ত বিবরণ')
@@ -355,7 +357,9 @@ class ApplicantForm
                                                         ->disabled(),
 
                                                 ])
-                                               ,
+                                                 ->hidden(fn ($livewire) => $livewire->getRecord()?->status === 'pending' 
+                                                    || $livewire->getRecord()?->status === 'rejected'),
+                                               
                                             Grid::make(3)
                                                 ->schema([
                                                     TextEntry::make('fee')
@@ -369,7 +373,8 @@ class ApplicantForm
                                                         ->label(__('forms.created_by'))
                                                         ->formatStateUsing(fn ($record) => $record?->createdBy?->name),
                                                     ])
-                                                    ->hidden(fn ($livewire) => $livewire->getRecord()?->status === 'pending'),
+                                                    ->hidden(fn ($livewire) => $livewire->getRecord()?->status === 'pending' 
+                                                    || $livewire->getRecord()?->status === 'rejected'),
                                             Grid::make(3)
                                                 ->schema([
                                                     TextEntry::make('security_fee')
@@ -384,6 +389,7 @@ class ApplicantForm
                                                 ->hidden(fn ($livewire) => $livewire->getRecord()?->status === 'selected' 
                                                                             || $livewire->getRecord()?->status === 'pending'
                                                                             || $livewire->getRecord()?->status === 'confirmed'
+                                                                            || $livewire->getRecord()?->status === 'unselected'
                                                                             || $livewire->getRecord()?->status === 'rejected'),
                                                   Grid::make(3)
                                                     ->schema([
@@ -411,29 +417,49 @@ class ApplicantForm
                                                     ->hidden(fn($record)=>$record?->is_yearly_fee_refund==false), 
                                           
                                                 
-                                                ]),
+                                        ]),
+
+                                Section::make('আবেদনের অবস্থা')
+                                    ->schema([
+                                        Grid::make(2)
+                                            ->schema([
+                                                Select::make('is_rejected')
+                                                    ->label(__('forms.is_rejected'))
+                                                    ->options([
+                                                        1 => 'হ্যাঁ',
+                                                        0 => 'না',
+                                                    ])
+                                                    ->reactive()
+                                                    ->afterStateUpdated(function(callable $set,$state){
+                                                        if(!$state){
+                                                            return $set('note',null);
+                                                        }
+                                                    })
+                                                    ->required()
+                                                    ->default(0), 
+                                                Textarea::make('note')   
+                                                    ->label(__('forms.note'))
+                                                    ->required(fn(callable $get)=>$get('is_rejected')==true)
+                                                    
+                                                    ->dehydrated(true),
+                                            ])
+                                            // ->visible(fn ($livewire) => $livewire->getRecord()?->status === 'unselected')
+                                            // ->disabled(fn($record)=>$record?->is_yearly_fee_refund==true && auth()->user()->hasRole('admin'))
+                                            ->columnSpanFull(),
+
+                                    ])
+                                    ->visible(fn ($livewire,$record) => $record->status === 'pending' || $record->status === 'rejected' )
+                                    ->columnSpanFull()
                                             
                                                 // ->visible(fn($record)=>$record->is_security_refund===true),                  
 
                             ]),
                             
-                        ])
-                        ->skippable()
-                        ->columns(2)
-                        ->columnSpanFull(),
-                
-                
-                // TextInput::make('confirmed_by')
-                //     ->numeric()
-                //     ->default(null),
-                // TextInput::make('approved_by')
-                //     ->numeric()
-                //     ->default(null),
-               
-                // DatePicker::make('applicaton_date'),
-                // DatePicker::make('confirm_date'),
-                // DatePicker::make('approval_date'),
-                // DatePicker::make('expire_date'),
+                    ])
+                    ->persistStepInQueryString()
+                    ->skippable()
+                    ->columns(2)
+                    ->columnSpanFull(),
                
             ]);
     }

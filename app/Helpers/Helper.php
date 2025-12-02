@@ -28,7 +28,7 @@ class Helper
         return str_replace($en, $bn, $number);
     }
 
-    public static function compress($file, $path, $quality = 70)
+    public static function compress($file, $path, $quality = 50)
     {
         $extension = strtolower($file->getClientOriginalExtension());
 

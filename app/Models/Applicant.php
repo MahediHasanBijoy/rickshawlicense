@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\Console\Application;
 
 class Applicant extends Model
 {
@@ -55,7 +56,8 @@ class Applicant extends Model
         // });
 
          static::updated(function ($application) {
-
+            
+            $settings=ApplicationSetting::latest()->first();
             if ($application->isDirty('status') && $application->status === 'approved') {
 
                 $area = Area::find($application->area_id);
@@ -73,21 +75,30 @@ class Applicant extends Model
                 $currentYear = now()->year;
                 $currentMonth = now()->month;
 
-                if ($currentMonth == 1) {
+                if ($settings->license_year > $currentYear) {
                     // January → expire this year
-                    $expireYear = $currentYear;
+                    $expireYear = $currentYear + 1;
                 } else {
                     // February to December → expire next year
-                    $expireYear = $currentYear + 1;
+                    $expireYear = $currentYear;
                 }
 
                 $expireDate = $expireYear . '-12-31';
 
                 // SAVE
-                $application->updateQuietly([
+                $application->saveQuietly([
                     'license_number' => $licenseNumber,
                     'expire_date'    => $expireDate,
                 ]);
+            }
+
+            if($application->isDirty('is_rejected') && $application->is_rejected){
+                $application->status='rejected';
+                $application->saveQuietly();
+            }
+             if($application->isDirty('is_rejected') && !$application->is_rejected){
+                $application->status='pending';
+                $application->saveQuietly();
             }
         });
     }

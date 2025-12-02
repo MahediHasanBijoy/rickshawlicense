@@ -55,5 +55,7 @@ return [
     'is_security_refund'=>'সিকিউরিটি ফি ফেরত দিতে চান?',
     'security_refundable'=>'ফেরত যোগ্য সিকিউরিটি',
     'actor'=>'সম্পাদনকারী',
-    'license_year'=>'লাইসেন্সের বছর', 
+    'license_year'=>'লাইসেন্সের বছর',
+    'is_rejected' =>'আবেদন বাতিল করতে চান?',
+    'note'=>'মন্তব্য',
 ];

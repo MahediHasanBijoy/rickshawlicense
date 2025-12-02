@@ -12,9 +12,19 @@ class EditApplicant extends EditRecord
 {
     protected static string $resource = ApplicantResource::class;
 
+    public ?string $activeStep = null;
+
     public function getTitle(): string
     {
         return "আবেদন নং: {$this->record->application_number} — {$this->record->applicant_name}";
+    }
+
+    public function mount($record): void
+    {
+        parent::mount($record);
+         if (request()->filled('step')) {
+        return;
+    }
     }
     protected function getHeaderActions(): array
     {
@@ -25,7 +35,7 @@ class EditApplicant extends EditRecord
                 ->label('রশিদ প্রিন্ট করুন')
                 ->url(fn () => route('applicant.receipt', ['app_id' => $this->record->id]))
                 ->openUrlInNewTab()
-                ->visible(fn()=>$this->record->status!='pending'),
+                ->visible(fn () => ! in_array($this->record->status, ['pending', 'rejected'])),
         ];
     }
 
@@ -35,4 +45,8 @@ class EditApplicant extends EditRecord
         return $data;
     }
 
+   public function getRedirectUrl(): string
+    {
+        return static::getResource()::getUrl('edit', ['record' => $this->record->id]);
+    }
 }

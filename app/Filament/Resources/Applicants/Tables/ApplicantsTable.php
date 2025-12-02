@@ -75,7 +75,7 @@ class ApplicantsTable
                         'warning' => 'pending',
                         'info' => 'confirmed',
                         'success' => 'approved',
-                        'danger' => 'rejected',
+                        'danger' => 'unselected',
                     ])
                     ->sortable(),
                 // TextColumn::make('confirm_date')
@@ -135,12 +135,12 @@ class ApplicantsTable
                     })
                     ->color('warning')
                     ->visible(fn($record)=>$record->status==='confirmed' && auth()->user()->hasRole('super_admin')),
-                Action::make('reject')
+                Action::make('unselect')
                     ->label('')
                     ->icon('heroicon-o-x-circle')
                     ->action(function ($record) {
                         $record->update([
-                            'status' => 'rejected',
+                            'status' => 'unselected',
                         ]);
 
                     })
