@@ -1,3 +1,10 @@
+<style>
+    .status-badge {
+        padding: 10px 25px;
+        font-size: 25px;
+        font-weight: bold;
+    }
+</style>
 <div class="print-area border p-4 rounded mt-4 shadow-sm bg-white">
 
     <div class="text-center mb-4">
@@ -28,7 +35,34 @@
     <hr>
 
     <h5 class="fw-bold mt-4 mb-3">আবেদনের অবস্থা</h5>
-    <p><strong>{{ $applicant->status??'' }}</strong> </p>
+    @php
+        // Bengali text mapping
+        $statusText = [
+            'pending'   => 'অপেক্ষমাণ',
+            'confirmed' => 'নিশ্চিত',
+            'approved'  => 'অনুমোদিত',
+            'selected'  => 'নির্বাচিত',
+            'rejected'  => 'বাতিল',
+            'expired'   => 'মেয়াদোত্তীর্ণ',
+            'unselected' => 'অনির্বাচিত'
+        ];
+
+        // Badge color mapping
+        $statusClass = [
+            'pending'   => 'status-badge alert alert-primary',
+            'confirmed' => 'status-badge alert alert-info',
+            'approved'  => 'status-badge alert alert-success',
+            'selected'  => 'status-badge alert alert-success',
+            'rejected'  => 'status-badge alert alert-danger',
+            'expired'   => 'status-badge alert alert-dark',
+            'unselected'   => 'status-badge alert alert-dark',
+        ];
+
+        $currentStatus = strtolower($applicant->status ?? 'pending');
+    @endphp
+    <span class="{{ $statusClass[$currentStatus] ?? 'status-badge bg-primary' }}">
+        {{ $statusText[$currentStatus] ?? 'অপেক্ষমাণ' }}
+    </span>
     <hr>
     <a href="{{ route('applicant.print', ['id' => $applicant->id]) }}" class="btn btn-success btn-lg mx-auto" target="_blank">
         প্রিন্ট করুন
