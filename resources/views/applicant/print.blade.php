@@ -66,7 +66,7 @@
 
         .form-header {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             border-bottom: 2px solid #000;
             padding-bottom: 15px;
         }
@@ -90,7 +90,7 @@
 
         .info-row {
             display: flex;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             align-items: baseline;
             page-break-inside: avoid;
         }
@@ -111,7 +111,7 @@
         .section-title {
             font-weight: bold;
             font-size: 12pt;
-            margin: 25px 0 15px 0;
+            margin: 20px 0 10px 0;
             padding: 8px;
             background: #f0f0f0;
             border-left: 4px solid #333;
@@ -127,7 +127,7 @@
         .data-table th,
         .data-table td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 5px;
             text-align: left;
             vertical-align: top;
         }
@@ -226,7 +226,7 @@
         @media screen {
             .print-container {
                 box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                margin: 20px auto;
+                margin: 10px auto;
             }
         }
 
@@ -244,6 +244,70 @@
                 background: #f0f0f0 !important;
                 -webkit-print-color-adjust: exact !important;
             }
+        }
+
+        /* Application Status Section */
+        .status-section {
+            margin-top: 25px;
+            page-break-inside: avoid;
+        }
+
+        .status-box {
+            padding: 8px 15px;
+            border-left: 4px solid;
+            font-size: 11pt;
+            margin-bottom: 8px;
+            color: #000;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* Status colors */
+        .status-selected {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+        }
+
+        .status-confirmed {
+            background: #cfe2ff !important;
+            border-color: #0d6efd !important;
+        }
+
+        .status-pending {
+            background: #fff3cd !important;
+            border-color: #ffc107 !important;
+        }
+
+        .status-rejected {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+        }
+
+        .status-approved {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+        }
+
+        .status-expired {
+            background: #e2e3e5 !important;
+            border-color: #6c757d !important;
+        }
+
+        .status-unselected {
+            background: #e2e3e5 !important;
+            border-color: #4f718fff !important;
+        }
+
+        /* Rejection Note */
+        .status-note {
+            padding: 12px;
+            border: 1px solid #dc3545;
+            border-radius: 4px;
+            background: #f8d7da;
+            font-size: 10.5pt;
+            color: #721c24;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
     </style>
 </head>
@@ -386,12 +450,44 @@
 
         <!-- Declaration Section -->
         <div class="declaration">
-            <p><strong>ঘোষণা:</strong></p>
-            <p style="margin-top: 10px;">
+            <strong>ঘোষণা:</strong>
+            <p class="m-0">
                 আমি এই মর্মে ঘোষণা করছি যে, উপরোক্ত সকল তথ্য সঠিক এবং সত্য। কোন তথ্য মিথ্যা প্রমাণিত হলে 
                 আমার আবেদন বাতিল করা যাবে এবং আমি এর জন্য দায়ী থাকব।
             </p>
         </div>
+
+        <!-- Section: Application Status -->
+        <div class="status-section">
+            @php
+            $statusText = [
+                'pending'   => 'অপেক্ষমাণ',
+                'confirmed' => 'নিশ্চিত',
+                'approved'  => 'অনুমোদিত',
+                'selected'  => 'নির্বাচিত',
+                'rejected'  => 'বাতিল',
+                'expired'   => 'মেয়াদোত্তীর্ণ',
+                'unselected' => 'অনির্বাচিত'
+            ];
+
+            $currentStatus = strtolower($applicant->status ?? 'pending');
+        @endphp
+
+        <div class="section-title">
+            <strong>আবেদনের অবস্থা:</strong>
+            <span class="status-text">
+                {{ $statusText[$currentStatus] ?? 'অপেক্ষমাণ' }}
+            </span>
+        </div>
+
+            @if(strtolower($applicant->status) === 'rejected' && !empty($applicant->note))
+                <div class="declaration">
+                    <strong>নোট:</strong>
+                    <p class="m-0">{{ $applicant->note }}</p>
+                </div>
+            @endif
+        </div>
+
 
         <!-- Signature Section -->
         <!-- <div class="signature-section">
@@ -421,9 +517,9 @@
     <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
     <script>
         window.print();
-        window.onafterprint = function () {
-            window.close();
-        };
+        // window.onafterprint = function () {
+        //     window.close();
+        // };
     </script>
 </body>
 </html>

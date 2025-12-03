@@ -28,27 +28,85 @@ class Helper
         return str_replace($en, $bn, $number);
     }
 
-    public static function compress($file, $path, $quality = 50)
+    // public static function compress($file, $path, $quality = 50)
+    // {
+    //     $extension = strtolower($file->getClientOriginalExtension());
+
+    //     $filename = time() . '_' . uniqid() . '.jpg';
+    //     $fullPath = storage_path('app/public/' . $path . '/' . $filename);
+
+    //     if ($extension === 'jpg' || $extension === 'jpeg') {
+    //         $image = imagecreatefromjpeg($file);
+    //     } elseif ($extension === 'png') {
+    //         $image = imagecreatefrompng($file);
+    //         imagepalettetotruecolor($image);
+    //     } else {
+    //         // PDF or unsupported → store original
+    //         return $file->store($path, 'public');
+    //     }
+
+    //     imagejpeg($image, $fullPath, $quality);
+    //     imagedestroy($image);
+
+    //     return $path . '/' . $filename;
+    // }
+
+    public static function compress($file, $path, $quality = 60)
     {
         $extension = strtolower($file->getClientOriginalExtension());
 
+        // Convert PNG → JPG to reduce size drastically
         $filename = time() . '_' . uniqid() . '.jpg';
         $fullPath = storage_path('app/public/' . $path . '/' . $filename);
 
+        // Get temp file path to check size
+        $fileSize = $file->getSize(); // bytes
+
+        // Create image resource
         if ($extension === 'jpg' || $extension === 'jpeg') {
             $image = imagecreatefromjpeg($file);
         } elseif ($extension === 'png') {
             $image = imagecreatefrompng($file);
             imagepalettetotruecolor($image);
         } else {
-            // PDF or unsupported → store original
             return $file->store($path, 'public');
         }
 
+        // -------------------------------------
+        // AUTO RESIZE FOR LARGE IMAGES
+        // -------------------------------------
+
+        if ($fileSize > 1 * 1024 * 1024) {   // > 2MB
+            list($width, $height) = getimagesize($file);
+
+            $maxWidth = 1200; // Safe for text visibility
+
+            if ($width > $maxWidth) {
+                $newWidth  = $maxWidth;
+                $newHeight = intval(($height / $width) * $newWidth);
+
+                $resized = imagecreatetruecolor($newWidth, $newHeight);
+
+                // Preserve PNG transparency
+                imagealphablending($resized, false);
+                imagesavealpha($resized, true);
+
+                imagecopyresampled($resized, $image, 0, 0, 0, 0, 
+                    $newWidth, $newHeight, $width, $height);
+
+                imagedestroy($image);
+                $image = $resized;
+            }
+        }
+
+        // -------------------------------------
+        // SAVE COMPRESSED JPG
+        // -------------------------------------
         imagejpeg($image, $fullPath, $quality);
         imagedestroy($image);
 
         return $path . '/' . $filename;
     }
+
 }
 
