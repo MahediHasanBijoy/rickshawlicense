@@ -58,4 +58,5 @@ return [
     'license_year'=>'লাইসেন্সের বছর',
     'is_rejected' =>'আবেদন বাতিল করতে চান?',
     'note'=>'মন্তব্য',
+    'applicant_year'=>'আবেদনের বছর',
 ];

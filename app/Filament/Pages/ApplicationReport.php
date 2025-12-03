@@ -43,7 +43,7 @@ class ApplicationReport extends Page implements HasTable, HasForms
     {
         return 'আবেদন রিপোর্ট';
     }
-
+ 
     
     public function mount()
     {
