@@ -4,6 +4,15 @@
         font-size: 25px;
         font-weight: bold;
     }
+
+    .declaration {
+        margin-top: 25px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        background: #f8f9fa;
+        font-size: 10pt;
+        page-break-inside: avoid;
+    }
 </style>
 <div class="print-area border p-4 rounded mt-4 shadow-sm bg-white">
 
@@ -39,7 +48,7 @@
         // Bengali text mapping
         $statusText = [
             'pending'   => 'অপেক্ষমাণ',
-            'confirmed' => 'নিশ্চিত',
+            'confirmed' => 'গৃহীত হয়েছে',
             'approved'  => 'অনুমোদিত',
             'selected'  => 'নির্বাচিত',
             'rejected'  => 'বাতিল',
@@ -63,11 +72,18 @@
     <span class="{{ $statusClass[$currentStatus] ?? 'status-badge bg-primary' }}">
         {{ $statusText[$currentStatus] ?? 'অপেক্ষমাণ' }}
     </span>
+    
+        @if ($applicant->status=='rejected')
+             <div class="declaration text-danger">
+                    <strong>নোট:</strong>
+                    <p class="m-0">{{ $applicant->note }}</p>
+            </div>
+        @endif
     <hr>
     <a href="{{ route('applicant.print', ['id' => $applicant->id]) }}" class="btn btn-success btn-lg mx-auto" target="_blank">
         প্রিন্ট করুন
     </a>
-    @if($applicant->status=='pending')
+    @if(($applicant->status=='pending' || $applicant->status=='rejected') && \Carbon\Carbon::parse($settings->app_expire_date)->greaterThanOrEqualTo(today()))
     <a href="{{ route('applicant.edit', ['id' => $applicant->id]) }}" class="btn btn-primary btn-lg">
             সম্পাদনা করুন
     </a>

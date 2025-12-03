@@ -196,12 +196,15 @@ class ApplicantController extends Controller
             ]);
         }
 
+        $settings=ApplicationSetting::latest()->first();
+
         $applicant = Applicant::when($request->nid, function ($query) use ($request) {
                                     return $query->where('nid_no', $request->nid);
                                 })
                             ->when($request->phone, function ($query) use ($request) {
                                     return $query->where('phone', $request->phone);
                                 })
+                            ->latest()
                             ->first();
 
         if (!$applicant) {
@@ -209,7 +212,7 @@ class ApplicantController extends Controller
                 'error' => 'কোনো তথ্য পাওয়া যায়নি'
             ]);
         }
-        $html = view('applicant.search', compact('applicant'))->render();
+        $html = view('applicant.search', compact('applicant','settings'))->render();
 
         return response()->json(['html' => $html]);
     }
@@ -248,7 +251,7 @@ class ApplicantController extends Controller
     public function edit($id)
     {
         $applicant = Applicant::findOrFail($id);
-        if($applicant->status!='pending'){
+        if($applicant->status!='pending' && $applicant->status!='rejected'){
             return redirect()->route('home');
         }
         $areas = Area::select('id', 'area_name')->get();
