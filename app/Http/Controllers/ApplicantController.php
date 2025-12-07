@@ -66,7 +66,7 @@ class ApplicantController extends Controller
             // File validation
             'applicant_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
             // 'signature_image'   => 'nullable|image|max:2048',
-            'citizen_certificate_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'citizen_certificate_image'   => 'required_unless:category_id,3,5|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'category_proof_image'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'nid_image'         => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'py_order_image'    => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
@@ -269,6 +269,17 @@ class ApplicantController extends Controller
             'phone'  => Helper::bn2en($request->phone),
         ]);
 
+        // Determine if citizen_certificate_image should be required
+        $needsCitizenCertificate =
+            !in_array($request->category_id, [3, 5]) &&
+            empty($applicant->citizen_certificate_image);
+
+        // Build rule
+        $cCitizenRule = $needsCitizenCertificate
+            ? 'required|file|mimes:jpg,jpeg,png,pdf|max:10240'
+            : 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240';
+
+
         $validated = $request->validate([
             'area_id'           => 'required|exists:areas,id',
             'category_id'       => 'required|exists:categories,id',
@@ -304,7 +315,7 @@ class ApplicantController extends Controller
             // Images → optional during update
             'applicant_image'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             // 'signature_image'          => 'nullable|image|max:10240',
-            'citizen_certificate_image'=> 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'citizen_certificate_image'=>  $cCitizenRule,
             'category_proof_image'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'nid_image'                => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'py_order_image'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',

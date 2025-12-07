@@ -276,62 +276,7 @@
                             </div>
                         </div>
 
-                        <div class=" mb-3 align-items-center">
-                            <label class="col-form-label fw-bold">
-                                নাগরিক সনদ<span class="text-danger">*</span>
-                            </label>
-                            <div class="ms-5">
-                                <input type="file" name="citizen_certificate_image" class="form-control form-control-lg @error('citizen_certificate_image') is-invalid @enderror" placeholder="" id="citizen_certificate_image">
-                                @error('citizen_certificate_image')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                                @if($applicant->citizen_certificate_image)
-                                @php
-                                    $filePath = $applicant->citizen_certificate_image;
-                                    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-                                    $pdf_display = $extension=='pdf'?'':'display:none;';
-                                    $img_display = $extension!='pdf'?'':'display:none;';
-                                @endphp
-                                    <div class="my-2" id="citizen_preview_box" >
-                                        <!-- PDF Preview -->
-                                        <iframe 
-                                            src="{{ asset('storage/'.$filePath) }}" 
-                                            width="100%" 
-                                            height="300" 
-                                            style="border:1px solid #ccc;{{ $pdf_display }}"
-                                            id="citizen_pdf_preview">
-                                        </iframe>
-                                        <!-- Image Preview -->
-                                        <img 
-                                            src="{{ asset('storage/'.$filePath) }}" 
-                                            alt="Citizen Image" 
-                                            width="200" 
-                                            style="{{ $img_display }}"
-                                            id="citizen_image_preview">
-                                    </div>
-                                @else
-                                    <div class="my-2" id="citizen_preview_box" >
-                                        <!-- PDF Preview -->
-                                        <iframe 
-                                            src="" 
-                                            width="100%" 
-                                            height="300" 
-                                            style="border:1px solid #ccc;display:none;"
-                                            id="citizen_pdf_preview">
-                                        </iframe>
-                                        <!-- Image Preview -->
-                                        <img 
-                                            src="" 
-                                            alt="Citizen Image" 
-                                            width="200" 
-                                            style="display:none;"
-                                            id="citizen_image_preview">
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
+                        
 
                         <div class=" mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
@@ -502,6 +447,63 @@
                                 @endif
                             </div>
                         </div>
+                        <div class=" mb-3 align-items-center citizen_certificate_block" style="{{ in_array(old('category_id',$applicant->category_id), [3,5]) ? 'display:none;' : '' }}">
+                            <label class="col-form-label fw-bold">
+                                নাগরিক সনদ<span class="text-danger">*</span><br>
+                                <small class="text-danger">মুক্তিযোদ্ধা ও ক্যান্টনমেন্ট বোর্ডের অবসর প্রাপ্ত কর্মকর্তা/কর্মচারীর জন্য প্রযোজ্য নয়</small>
+                            </label>
+                            <div class="ms-5">
+                                <input type="file" name="citizen_certificate_image" class="form-control form-control-lg @error('citizen_certificate_image') is-invalid @enderror" placeholder="" id="citizen_certificate_image">
+                                @error('citizen_certificate_image')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                @if($applicant->citizen_certificate_image)
+                                @php
+                                    $filePath = $applicant->citizen_certificate_image;
+                                    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                                    $pdf_display = $extension=='pdf'?'':'display:none;';
+                                    $img_display = $extension!='pdf'?'':'display:none;';
+                                @endphp
+                                    <div class="my-2" id="citizen_preview_box" >
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;{{ $pdf_display }}"
+                                            id="citizen_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="{{ asset('storage/'.$filePath) }}" 
+                                            alt="Citizen Image" 
+                                            width="200" 
+                                            style="{{ $img_display }}"
+                                            id="citizen_image_preview">
+                                    </div>
+                                @else
+                                    <div class="my-2" id="citizen_preview_box" >
+                                        <!-- PDF Preview -->
+                                        <iframe 
+                                            src="" 
+                                            width="100%" 
+                                            height="300" 
+                                            style="border:1px solid #ccc;display:none;"
+                                            id="citizen_pdf_preview">
+                                        </iframe>
+                                        <!-- Image Preview -->
+                                        <img 
+                                            src="" 
+                                            alt="Citizen Image" 
+                                            width="200" 
+                                            style="display:none;"
+                                            id="citizen_image_preview">
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                     <!-- Submit Button -->
                     <div class="text-center mt-3">
@@ -593,6 +595,19 @@
                 }
                 //document.getElementById('pay_order_image_preview').src = URL.createObjectURL(file);
             }
+        });
+        // based on category_id hide or show citizen_certificate_image
+        document.querySelectorAll('input[name="category_id"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                console.log("Selected Category:", this.value);
+                let block = document.querySelector('.citizen_certificate_block');
+
+                if (this.value == 3 || this.value == 5) {
+                    block.style.display = "none";
+                } else {
+                    block.style.display = "block";
+                }
+            });
         });
     </script>
     @if ($errors->any())

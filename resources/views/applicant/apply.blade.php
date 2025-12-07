@@ -310,24 +310,6 @@
 
                         <div class=" mb-3 align-items-center">
                             <label class="col-form-label fw-bold">
-                                নাগরিক সনদ<span class="text-danger">*</span>
-                            </label>
-                            <div class="ms-5">
-                                <input type="file" name="citizen_certificate_image" class="form-control form-control-lg @error('citizen_certificate_image') is-invalid @enderror" placeholder="" id="citizen_certificate_image">
-                                @error('citizen_certificate_image')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                                <div class="my-2" id="citizen_preview_box" style="display:none;">
-                                    <img src="" id="citizen_image_preview" alt="Citizen Image" width="200" style="display:none;">
-                                    <iframe id="citizen_pdf_preview" style="width:100%; height:300px; display:none;"></iframe>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class=" mb-3 align-items-center">
-                            <label class="col-form-label fw-bold">
                                 ক্যাটাগরি প্রমানক<span class="text-danger">*</span>
                             </label>
                             <div class="ms-5">
@@ -375,6 +357,24 @@
                                 <div class="my-2" id="pay_order_preview_box" style="display:none;">
                                     <img src="" id="pay_order_image_preview" alt="Pay Order Image" style="width:200px; display:none;">
                                     <iframe id="pay_order_pdf_preview" style="width:100%; height:300px; display:none;"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" mb-3 align-items-center citizen_certificate_block">
+                            <label class="col-form-label fw-bold">
+                                নাগরিক সনদ<span class="text-danger">*</span><br>
+                                <small class="text-danger">মুক্তিযোদ্ধা ও ক্যান্টনমেন্ট বোর্ডের অবসর প্রাপ্ত কর্মকর্তা/কর্মচারীর জন্য প্রযোজ্য নয়</small>
+                            </label>
+                            <div class="ms-5">
+                                <input type="file" name="citizen_certificate_image" class="form-control form-control-lg @error('citizen_certificate_image') is-invalid @enderror" placeholder="" id="citizen_certificate_image">
+                                @error('citizen_certificate_image')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <div class="my-2" id="citizen_preview_box" style="display:none;">
+                                    <img src="" id="citizen_image_preview" alt="Citizen Image" width="200" style="display:none;">
+                                    <iframe id="citizen_pdf_preview" style="width:100%; height:300px; display:none;"></iframe>
                                 </div>
                             </div>
                         </div>
@@ -618,6 +618,20 @@
                 
             }
         });
+        // based on category_id hide or show citizen_certificate_image
+        document.querySelectorAll('input[name="category_id"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                console.log("Selected Category:", this.value);
+                let block = document.querySelector('.citizen_certificate_block');
+
+                if (this.value == 3 || this.value == 5) {
+                    block.style.display = "none";
+                } else {
+                    block.style.display = "block";
+                }
+            });
+        });
+
     </script>
     @if ($errors->any())
     <script>
